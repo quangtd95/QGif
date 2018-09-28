@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Make Gif</string>
+    <string name="choose_images">Choose Images</string>
+    <string name="choose_video">Choose Video</string>
+    <string name="text_please_choose_photo">Please choose some photos</string>
+    <string name="text_start">start</string>
+    <string name="text_number">[%d / 100]</string>
+    <string name="choose_photo">Image</string>
+</resources>
