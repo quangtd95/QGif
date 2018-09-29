@@ -7,7 +7,7 @@
     <string name="text_number">[%d / 100]</string>
     <string name="duration_number">%.02f s</string>
     <string name="choose_photo">Image</string>
-    <string name="label_duration">Duration</string>
+    <string name="label_delay">Delay</string>
     <string name="label_dimension">Dimension</string>
     <string name="hint_width">width</string>
     <string name="hint_height">height</string>

@@ -13,4 +13,10 @@ public interface ExportGifPhotoView extends BaseView {
     void setWidthGif(String s);
 
     void setHeightGif(String s);
+
+    void onProgress(Float progress);
+
+    void onPrepareExport();
+
+    void onCompleteExport();
 }

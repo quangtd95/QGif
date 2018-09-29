@@ -1,8 +1,14 @@
 package com.sgif.makegif.view.export;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,8 +38,9 @@ import java.util.List;
  * on 9/29/2018.
  */
 public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter> implements PhotoChooseAdapter.OnClickRemoveItemListener, ExportGifPhotoView {
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
     private ProgressBar mPgExportGif;
-    private SeekBar mSbDuration;
+    private SeekBar mSbDelay;
     private TextView mTvDuration;
     private EditText mEdtWidth;
     private EditText mEdtHeight;
@@ -49,25 +56,29 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     }
 
     @Override
-    protected void initValues() {
+    protected void bindData() {
         Bundle bundle = getIntent().getExtras();
-        List<Photo> mPhotoList = null;
+        List<Photo> mPhotoList;
         if (bundle != null) {
             mPhotoList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
             if (mPhotoList == null || mPhotoList.size() < 2) {
                 DialogUtils.createAlertDialog(this, "Error", "please choose at least 2 photos", this::finish);
             }
+            mPhotoChooseAdapter.setItems(mPhotoList);
+            getPresenter(this).setAdapter(mPhotoChooseAdapter);
+            getPresenter(this).setDefaultDimens();
+            mChkKeepRatio.setChecked(getPresenter(this).isKeepRatio());
+        } else {
+            finish();
         }
-        mPhotoChooseAdapter = new PhotoChooseAdapter(this);
-        mPhotoChooseAdapter.setItems(mPhotoList);
-        getPresenter(this).setAdapter(mPhotoChooseAdapter);
+
     }
 
     @Override
     protected void initViews() {
         RecyclerView mRvPhotoChoose = findViewById(R.id.rvPhotoChoose);
         mPgExportGif = findViewById(R.id.pgExportGif);
-        mSbDuration = findViewById(R.id.sbDuration);
+        mSbDelay = findViewById(R.id.sbDelay);
         mTvDuration = findViewById(R.id.tvDuration);
         mEdtWidth = findViewById(R.id.edtWidth);
         mEdtHeight = findViewById(R.id.edtHeight);
@@ -75,22 +86,18 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mChkKeepRatio = findViewById(R.id.chkKeepRatio);
         mBtnExportGif = findViewById(R.id.btnExportGif);
 
-        mPgExportGif.setVisibility(View.GONE);
+        mPgExportGif.setVisibility(View.INVISIBLE);
 
         RecyclerViewUtils.Create().setUpGridHorizontal(this, mRvPhotoChoose, 1);
+        mPhotoChooseAdapter = new PhotoChooseAdapter(this);
         mRvPhotoChoose.setAdapter(mPhotoChooseAdapter);
-
-        mChkKeepRatio.setChecked(getPresenter(this).isKeepRatio());
-
-        getPresenter(this).setDefaultDimens();
-
     }
 
     @Override
     protected void initActions() {
         mPhotoChooseAdapter.setOnClickRemoveItemListener(this);
-        mSbDuration.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> {
-            getPresenter(this).setDuration(progress);
+        mSbDelay.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> {
+            getPresenter(this).setDelay(progress);
         });
         mEdtWidth.addTextChangedListener((AfterTextChangedWatcher) s -> {
             // user nhập
@@ -118,11 +125,20 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mBtnDefaultDimension.setOnClickListener(v -> {
             getPresenter(ExportGifPhotoActivity.this).setDefaultDimens();
         });
-        mBtnExportGif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mBtnExportGif.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                } else {
+                    getPresenter(ExportGifPhotoActivity.this).exportGif();
+                }
+            } else {
                 getPresenter(ExportGifPhotoActivity.this).exportGif();
             }
+
         });
     }
 
@@ -173,5 +189,38 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mEdtHeight.setText(s);
         mEdtHeight.setSelection(s.length());
         mEdtHeight.setTag(null);
+    }
+
+    @Override
+    public void onProgress(Float progress) {
+        mPgExportGif.setProgress((int) (progress * (mPgExportGif.getMax())));
+    }
+
+    @Override
+    public void onPrepareExport() {
+        mPgExportGif.setVisibility(View.VISIBLE);
+        showLoading();
+    }
+
+    @Override
+    public void onCompleteExport() {
+        mPgExportGif.setVisibility(View.INVISIBLE);
+        hideLoading();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getPresenter(this).exportGif();
+                } else {
+                    //TODO: nêu lí do cần cấp quyền
+                }
+                break;
+            }
+        }
     }
 }

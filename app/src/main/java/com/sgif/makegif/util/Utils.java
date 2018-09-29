@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.util.DisplayMetrics;
@@ -203,4 +204,25 @@ public class Utils {
         retriever.release();
         return bitmap;
     }
+
+    public static Matrix getMatrix(int srcWidth, int srcHeight, int desWidth, int desHeight) {
+        Matrix matrix = new Matrix();
+        float scaleX;
+        float scaleY;
+        float newWidth;
+        float newHeight;
+
+        scaleX = desWidth * 1.0f / srcWidth;
+        newWidth = desWidth;
+        newHeight = srcHeight * scaleX;
+        if (newHeight > desHeight) {
+            scaleY = desHeight * 1.0f / newHeight;
+            newHeight = desHeight;
+            newWidth = newWidth * scaleY;
+        }
+        matrix.setScale(newWidth * 1.0f / srcWidth, newHeight * 1.0f / srcHeight);
+        matrix.postTranslate((desWidth - newWidth) / 2, (desHeight - newHeight) / 2);
+        return matrix;
+    }
+
 }

@@ -31,7 +31,6 @@ import com.sgif.makegif.util.RecyclerViewUtils;
 import com.sgif.makegif.view.export.ExportGifPhotoActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,8 +38,6 @@ import java.util.List;
  * on 9/28/2018.
  */
 public class PhotoActivity extends BaseActivity<PhotoPresenter> implements PhotoView, FolderAdapter.OnClickItemFolderListener, PhotoAdapter.OnClickItemPhotoListener, PhotoChooseAdapter.OnClickRemoveItemListener, View.OnClickListener {
-
-    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
 
     private ImageView mImgBack;
     private TextView mTvNameFolder;
@@ -54,24 +51,11 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
     private FolderAdapter mAdapterFolder;
     private PhotoAdapter mAdapterPhoto;
     private PhotoChooseAdapter mAdapterPhotoChoose;
-    private List<Photo> mPhotoChosenList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-            } else {
-                getPresenter(this).loadPhoto();
-            }
-        } else {
-            getPresenter(this).loadPhoto();
-        }
+        getPresenter(this).loadPhoto();
     }
 
 
@@ -81,10 +65,17 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
     }
 
     @Override
-    protected void initValues() {
+    protected void bindData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mPhotoChosenList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
+            List<Photo> mPhotoChosenList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
+            if (mPhotoChosenList != null) {
+                mAdapterPhotoChoose.setItems(mPhotoChosenList);
+                mAdapterPhotoChoose.refresh();
+                mTvPlease.setVisibility(View.GONE);
+                mRlContainerPlease.setVisibility(View.VISIBLE);
+                mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
+            }
         }
     }
 
@@ -116,21 +107,12 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
         RecyclerViewUtils.Create().setUpHorizontal(this, mRecyclerPhotoChoose);
         mLayoutManagerPhotoChoose = (LinearLayoutManager) mRecyclerPhotoChoose.getLayoutManager();
         mAdapterPhotoChoose = new PhotoChooseAdapter(this);
+        mRecyclerPhotoChoose.setAdapter(mAdapterPhotoChoose);
 
         mRecyclerFolder.setVisibility(View.VISIBLE);
         mRecyclerPhoto.setVisibility(View.GONE);
         mRlContainerPlease.setVisibility(View.GONE);
         mTvPlease.setVisibility(View.VISIBLE);
-
-        mRecyclerPhotoChoose.setAdapter(mAdapterPhotoChoose);
-        if (mPhotoChosenList != null) {
-            mAdapterPhotoChoose.setItems(mPhotoChosenList);
-            mAdapterPhotoChoose.refresh();
-            mTvPlease.setVisibility(View.GONE);
-            mRlContainerPlease.setVisibility(View.VISIBLE);
-            mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
-        }
-
 
     }
 
@@ -214,20 +196,6 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getPresenter(this).loadPhoto();
-                } else {
-                    finish();
-                }
-                break;
-            }
-        }
-    }
 
     @Override
     public void onShowListImages(List<FolderImage> folderImages) {

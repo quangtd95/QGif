@@ -8,6 +8,8 @@ import android.content.Context;
  */
 public interface BaseView {
 
+    void showNotifyDialog(String message);
+
     Context getContext();
 
     void showLoading();

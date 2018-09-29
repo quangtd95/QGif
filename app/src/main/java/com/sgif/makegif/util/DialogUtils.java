@@ -29,9 +29,8 @@ public class DialogUtils {
             }
             dialog = null;
         }
-        dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.custom_progress_dialog);
         dialog.show();

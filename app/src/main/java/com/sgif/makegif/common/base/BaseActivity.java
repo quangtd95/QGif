@@ -1,5 +1,6 @@
 package com.sgif.makegif.common.base;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +13,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.sgif.makegif.util.DialogUtils;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -27,15 +30,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getIdLayout());
-        initValues();
         initViews();
+        bindData();
         initActions();
     }
 
     @LayoutRes
     protected abstract int getIdLayout();
 
-    protected abstract void initValues();
+    protected abstract void bindData();
 
     protected abstract void initViews();
 
@@ -62,8 +65,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         return this.viewPresenter;
     }
 
-
-    public void showDialogNotify(String message) {
+    @Override
+    public void showNotifyDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Notify");
         builder.setMessage(message);
@@ -86,11 +89,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void showLoading() {
-
+        DialogUtils.showLoadingDialog(this);
     }
 
     @Override
     public void hideLoading() {
-
+        DialogUtils.hideLoadingDialog();
     }
 }
