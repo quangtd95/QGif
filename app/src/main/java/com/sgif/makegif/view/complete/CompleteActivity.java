@@ -55,7 +55,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     }
 
     public static void startCompleteActivity(Context context, String resultPath) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(context, CompleteActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.BUNDLE_KEY_PATH_GIF, resultPath);
         intent.putExtras(bundle);

@@ -1,6 +1,7 @@
 package com.sgif.makegif.view.export;
 
 import android.Manifest;
+import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -129,7 +130,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         });
         mBtnExportGif.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -209,14 +210,16 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mPgExportGif.setVisibility(View.INVISIBLE);
         hideLoading();
         CompleteActivity.startCompleteActivity(this, resultPath);
-        finish();
     }
 
     @Override
     public void onCancelledExport(String error) {
-        mPgExportGif.setVisibility(View.INVISIBLE);
-        hideLoading();
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        runOnUiThread(() -> {
+            mPgExportGif.setVisibility(View.INVISIBLE);
+            hideLoading();
+            Toast.makeText(ExportGifPhotoActivity.this, error, Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     @Override
