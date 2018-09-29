@@ -167,13 +167,13 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
 
     @Override
     public void onCompleteExportGif(String s) {
-        getView().onCompleteExport();
+        getView().onCompleteExport(s);
         Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCancelledExportGif(String s) {
-        getView().onCompleteExport();
+        getView().onCancelledExport(s);
         getView().showNotifyDialog(s);
     }
 

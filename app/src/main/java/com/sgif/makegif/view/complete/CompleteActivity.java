@@ -3,11 +3,13 @@ package com.sgif.makegif.view.complete;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sgif.makegif.R;
 import com.sgif.makegif.common.Constants;
+import com.sgif.makegif.common.GlideApp;
 import com.sgif.makegif.common.base.BaseActivity;
 
 /**
@@ -25,12 +27,26 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
     @Override
     protected void bindData() {
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String resultPath = bundle.getString(Constants.BUNDLE_KEY_PATH_GIF);
+            if (TextUtils.isEmpty(resultPath)) {
+                //TODO:
+                finish();
+            } else {
+                mTvResultPath.setText(resultPath);
+                GlideApp.with(this).load(resultPath).into(mImvGif);
+            }
+        } else {
+            //TODO:
+            finish();
+        }
     }
 
     @Override
     protected void initViews() {
-
+        mImvGif = findViewById(R.id.imvGif);
+        mTvResultPath = findViewById(R.id.tvResultPath);
     }
 
     @Override

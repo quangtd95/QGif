@@ -18,5 +18,7 @@ public interface ExportGifPhotoView extends BaseView {
 
     void onPrepareExport();
 
-    void onCompleteExport();
+    void onCompleteExport(String resultPath);
+
+    void onCancelledExport(String error);
 }

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sgif.makegif.R;
 import com.sgif.makegif.common.Constants;
@@ -27,6 +28,7 @@ import com.sgif.makegif.common.listener.OnSeekBarChangeListener;
 import com.sgif.makegif.domain.model.Photo;
 import com.sgif.makegif.util.DialogUtils;
 import com.sgif.makegif.util.RecyclerViewUtils;
+import com.sgif.makegif.view.complete.CompleteActivity;
 import com.sgif.makegif.view.photo.PhotoActivity;
 import com.sgif.makegif.view.photo.PhotoChooseAdapter;
 
@@ -203,11 +205,19 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     }
 
     @Override
-    public void onCompleteExport() {
+    public void onCompleteExport(String resultPath) {
         mPgExportGif.setVisibility(View.INVISIBLE);
         hideLoading();
+        CompleteActivity.startCompleteActivity(this, resultPath);
+        finish();
     }
 
+    @Override
+    public void onCancelledExport(String error) {
+        mPgExportGif.setVisibility(View.INVISIBLE);
+        hideLoading();
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
