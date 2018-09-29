@@ -123,6 +123,9 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
             }
         });
         mChkKeepRatio.setOnClickListener(v -> {
+            if (mChkKeepRatio.isChecked()) {
+                getPresenter(ExportGifPhotoActivity.this).setDefaultDimens();
+            }
             getPresenter(ExportGifPhotoActivity.this).setKeepRatio(mChkKeepRatio.isChecked());
         });
         mBtnDefaultDimension.setOnClickListener(v -> {
