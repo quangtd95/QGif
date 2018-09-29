@@ -62,19 +62,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         return this.viewPresenter;
     }
 
-    public void startActivity(Class<?> cls) {
-        Intent intent = new Intent(this, cls);
-        startActivity(intent);
-    }
-
-    public boolean popFragment() {
-        if (getFragmentManager().getBackStackEntryCount() >= 0) {
-            getFragmentManager().popBackStackImmediate();
-            return true;
-        }
-        return false;
-    }
-
 
     public void showDialogNotify(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -84,7 +71,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         builder.show();
     }
 
-    public void updateStatusBarColor(String color) {// Color must be in hexadecimal fromat
+    public void updateStatusBarColor(String color) {// Color must be in hexadecimal format
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

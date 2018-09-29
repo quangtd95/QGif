@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dip05">
+
+            <ProgressBar
+                android:id="@+id/pgExportGif"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:max="100"
+                android:padding="@dimen/dip05"
+                android:progress="50" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvPhotoChoose"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/pgExportGif"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
+
+
+            <TextView
+                android:id="@+id/tvLabelDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/rvPhotoChoose"
+                android:padding="@dimen/dip10"
+                android:text="@string/label_duration" />
+
+            <SeekBar
+                android:id="@+id/sbDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/tvLabelDuration"
+                android:layout_marginEnd="2dp"
+                android:layout_toEndOf="@id/tvLabelDuration"
+                android:max="100"
+                android:padding="@dimen/dip10"
+                android:progress="0" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignStart="@id/sbDuration"
+                android:layout_below="@+id/tvLabelDuration"
+                android:gravity="center"
+                android:padding="@dimen/dip10"
+                android:text="0.5s"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvLabelDimension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvDuration"
+                android:layout_margin="@dimen/dip10"
+                android:text="@string/label_dimension" />
+
+            <LinearLayout
+                android:id="@+id/llDimension"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_alignStart="@+id/sbDuration"
+                android:layout_below="@+id/tvDuration"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/edtWidth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/hint_width"
+                    android:inputType="number"
+                    android:padding="@dimen/dip10"
+                    android:textSize="@dimen/dip12" />
+
+                <EditText
+                    android:id="@+id/edtHeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/hint_height"
+                    android:inputType="number"
+                    android:textSize="@dimen/dip12" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnDefaultDimension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/sbDuration"
+                android:layout_below="@+id/llDimension"
+
+                android:text="@string/default_dimension" />
+
+            <CheckBox
+                android:id="@+id/chkKeepRatio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btnDefaultDimension"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/btnDefaultDimension"
+                android:layout_margin="@dimen/dip10"
+                android:checked="true"
+                android:text="@string/keep_ratio" />
+
+            <Button
+                android:id="@+id/btnExportGif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnDefaultDimension"
+                android:layout_centerInParent="true"
+                android:text="@string/export_gif" />
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

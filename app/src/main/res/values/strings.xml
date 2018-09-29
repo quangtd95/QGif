@@ -5,5 +5,13 @@
     <string name="text_please_choose_photo">Please choose some photos</string>
     <string name="text_start">start</string>
     <string name="text_number">[%d / 100]</string>
+    <string name="duration_number">%.02f s</string>
     <string name="choose_photo">Image</string>
+    <string name="label_duration">Duration</string>
+    <string name="label_dimension">Dimension</string>
+    <string name="hint_width">width</string>
+    <string name="hint_height">height</string>
+    <string name="default_dimension">default dimension</string>
+    <string name="keep_ratio">keep ratio</string>
+    <string name="export_gif">Export gif</string>
 </resources>

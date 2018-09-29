@@ -40,8 +40,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
         });
 
-        mBtnChooseImage.setOnClickListener(v -> {
-            PhotoActivity.startPhotoActivity(this);
-        });
+        mBtnChooseImage.setOnClickListener(v -> PhotoActivity.startPhotoActivity(this));
     }
 }

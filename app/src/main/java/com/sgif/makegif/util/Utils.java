@@ -38,42 +38,6 @@ public class Utils {
     private static Dialog dialog;
     private static int screenWidth = -1;
 
-    /**
-     * @param context app context
-     */
-    public static void showLoadingDialog(Context context) {
-        if (null == context) return;
-        if (dialog != null) {
-            if (dialog.isShowing()) {
-                try {
-                    dialog.dismiss();
-                } catch (Exception e) {
-                }
-            }
-            dialog = null;
-        }
-        dialog = new Dialog(context, android.R.style.Theme_Translucent);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        //here we set layout of progress dialog
-        dialog.setContentView(R.layout.custom_progress_dialog);
-        dialog.show();
-    }
-
-    /**
-     * dismiss loading dialog when done
-     */
-    public static void hideLoadingDialog() {
-        try {
-            if (dialog != null) {
-                dialog.dismiss();
-                dialog = null;
-            }
-        } catch (Exception ex) {
-            dialog = null;
-        }
-
-    }
 
     // size to the
     // screen width
