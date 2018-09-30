@@ -1,16 +1,9 @@
-package com.sgif.makegif.view.photo;
+package com.sgif.makegif.screen.gallery;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,12 +16,14 @@ import android.widget.TextView;
 import com.sgif.makegif.R;
 import com.sgif.makegif.common.Constants;
 import com.sgif.makegif.common.base.BaseActivity;
-import com.sgif.makegif.domain.model.FolderImage;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.FolderMedia;
+import com.sgif.makegif.domain.model.Media;
+import com.sgif.makegif.domain.model.MediaType;
+import com.sgif.makegif.screen.export.ExportGifPhotoActivity;
+import com.sgif.makegif.screen.export.ExportGifVideoActivity;
 import com.sgif.makegif.util.DialogUtils;
 import com.sgif.makegif.util.GridSpacingItemDecoration;
 import com.sgif.makegif.util.RecyclerViewUtils;
-import com.sgif.makegif.view.export.ExportGifPhotoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +32,7 @@ import java.util.List;
  * Created by quang.td95@gmail.com
  * on 9/28/2018.
  */
-public class PhotoActivity extends BaseActivity<PhotoPresenter> implements PhotoView, FolderAdapter.OnClickItemFolderListener, PhotoAdapter.OnClickItemPhotoListener, PhotoChooseAdapter.OnClickRemoveItemListener, View.OnClickListener {
+public class GalleryActivity extends BaseActivity<GalleryPresenter> implements GalleryView, FolderAdapter.OnClickItemFolderListener, GalleryAdapter.OnClickItemPhotoListener, ChooseAdapter.OnClickRemoveItemListener, View.OnClickListener {
 
     private ImageView mImgBack;
     private TextView mTvNameFolder;
@@ -49,39 +44,46 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
     private RecyclerView mRecyclerPhoto;
     private LinearLayoutManager mLayoutManagerPhotoChoose;
     private FolderAdapter mAdapterFolder;
-    private PhotoAdapter mAdapterPhoto;
-    private PhotoChooseAdapter mAdapterPhotoChoose;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPresenter(this).loadPhoto();
-    }
-
+    private GalleryAdapter mAdapterPhoto;
+    private ChooseAdapter mAdapterPhotoChoose;
+    private MediaType mMediaType;
 
     @Override
     protected int getIdLayout() {
-        return R.layout.activity_photo;
+        return R.layout.activity_gallery;
     }
 
     @Override
     protected void bindData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            List<Photo> mPhotoChosenList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
-            if (mPhotoChosenList != null) {
-                mAdapterPhotoChoose.setItems(mPhotoChosenList);
-                mAdapterPhotoChoose.refresh();
-                mTvPlease.setVisibility(View.GONE);
-                mRlContainerPlease.setVisibility(View.VISIBLE);
-                mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
+            mMediaType = MediaType.getByCode(bundle.getInt(Constants.BUNDLE_KEY_MEDIA_TYPE, Constants.TYPE_PHOTO));
+            switch (mMediaType) {
+                case PHOTO:
+                    mTvNameFolder.setText(R.string.choose_photo);
+                    List<Media> mPhotoChosenList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
+                    if (mPhotoChosenList != null) {
+                        mAdapterPhotoChoose.setItems(mPhotoChosenList);
+                        mAdapterPhotoChoose.refresh();
+                        mTvPlease.setVisibility(View.GONE);
+                        mRlContainerPlease.setVisibility(View.VISIBLE);
+                        mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
+                    }
+                    break;
+                case VIDEO:
+                    mTvNameFolder.setText(R.string.choose_video);
+                    mTvPlease.setVisibility(View.GONE);
+                    mRlContainerPlease.setVisibility(View.GONE);
+                    break;
             }
+            getPresenter(this).loadMedia(mMediaType);
         }
+
     }
 
     @Override
     protected void initViews() {
-        mImgBack = findViewById(R.id.imgBack);
+        mImgBack = findViewById(R.id.imvBack);
         mTvNameFolder = findViewById(R.id.tvNameFolder);
         mTvPlease = findViewById(R.id.tvPlease);
         mTvNumber = findViewById(R.id.tvNumber);
@@ -96,7 +98,7 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
 
         mRecyclerPhoto = findViewById(R.id.recyclerPhoto);
         GridLayoutManager mLayoutManagerPhoto = new GridLayoutManager(this, 3);
-        mAdapterPhoto = new PhotoAdapter(this);
+        mAdapterPhoto = new GalleryAdapter(this);
         mRecyclerPhoto.setLayoutManager(mLayoutManagerPhoto);
         mRecyclerPhoto.setAdapter(mAdapterPhoto);
         GridSpacingItemDecoration itemDecoration = new GridSpacingItemDecoration(3, 10, false);
@@ -106,13 +108,17 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
         RecyclerView mRecyclerPhotoChoose = findViewById(R.id.recyclerPhotoChoose);
         RecyclerViewUtils.Create().setUpHorizontal(this, mRecyclerPhotoChoose);
         mLayoutManagerPhotoChoose = (LinearLayoutManager) mRecyclerPhotoChoose.getLayoutManager();
-        mAdapterPhotoChoose = new PhotoChooseAdapter(this);
+        mAdapterPhotoChoose = new ChooseAdapter(this);
         mRecyclerPhotoChoose.setAdapter(mAdapterPhotoChoose);
 
         mRecyclerFolder.setVisibility(View.VISIBLE);
         mRecyclerPhoto.setVisibility(View.GONE);
         mRlContainerPlease.setVisibility(View.GONE);
-        mTvPlease.setVisibility(View.VISIBLE);
+        if (mMediaType == MediaType.PHOTO) {
+            mTvPlease.setVisibility(View.VISIBLE);
+        } else {
+            mTvPlease.setVisibility(View.GONE);
+        }
 
     }
 
@@ -130,13 +136,21 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.imgBack:
+            case R.id.imvBack:
                 if (mRecyclerFolder.getVisibility() == View.VISIBLE) {
                     finish();
                 } else {
                     mRecyclerFolder.setVisibility(View.VISIBLE);
                     mRecyclerPhoto.setVisibility(View.GONE);
-                    mTvNameFolder.setText(getString(R.string.choose_photo));
+                    switch (mMediaType) {
+                        case PHOTO:
+                            mTvNameFolder.setText(getString(R.string.choose_photo));
+                            break;
+                        case VIDEO:
+                            mTvNameFolder.setText(getString(R.string.choose_video));
+                            break;
+                    }
+
                 }
                 break;
             case R.id.llNumber:
@@ -146,8 +160,7 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
                             "error",
                             "please choose at least 2 photos to continue");
                 } else {
-                    ExportGifPhotoActivity.startActivity(this, (ArrayList<Photo>) mAdapterPhotoChoose.getItems());
-                    finish();
+                    ExportGifPhotoActivity.startActivity(this, (ArrayList<Media>) mAdapterPhotoChoose.getItems());
                 }
 
                 break;
@@ -155,29 +168,35 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
     }
 
     @Override
-    public void onClickFolder(FolderImage folderImage) {
+    public void onClickFolder(FolderMedia folderPhoto) {
         mRecyclerPhoto.setVisibility(View.VISIBLE);
         mRecyclerFolder.setVisibility(View.GONE);
-        mTvNameFolder.setText(folderImage.getName());
-        mAdapterPhoto.setItems(folderImage.getPhotos());
+        mTvNameFolder.setText(folderPhoto.getName());
+        mAdapterPhoto.setItems(folderPhoto.getListMedia());
         mAdapterPhoto.refresh();
     }
 
     @Override
-    public void onClickItemPhoto(Photo photo) {
-        if (mAdapterPhotoChoose.size() < Constants.MAX_PHOTO) {
-            mAdapterPhotoChoose.addItem(photo);
-            mLayoutManagerPhotoChoose.scrollToPosition(mAdapterPhotoChoose.size() - 1);
-            mAdapterPhotoChoose.refreshAdd();
+    public void onClickItemMedia(Media media) {
+        switch (mMediaType) {
+            case PHOTO:
+                if (mAdapterPhotoChoose.size() < Constants.MAX_PHOTO) {
+                    mAdapterPhotoChoose.addItem(media);
+                    mLayoutManagerPhotoChoose.scrollToPosition(mAdapterPhotoChoose.size() - 1);
+                    mAdapterPhotoChoose.refreshAdd();
 
-            if (mAdapterPhotoChoose.size() == 0) {
-                mTvPlease.setVisibility(View.VISIBLE);
-                mRlContainerPlease.setVisibility(View.GONE);
-            } else {
-                mTvPlease.setVisibility(View.GONE);
-                mRlContainerPlease.setVisibility(View.VISIBLE);
-                mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
-            }
+                    if (mAdapterPhotoChoose.size() == 0) {
+                        mTvPlease.setVisibility(View.VISIBLE);
+                        mRlContainerPlease.setVisibility(View.GONE);
+                    } else {
+                        mTvPlease.setVisibility(View.GONE);
+                        mRlContainerPlease.setVisibility(View.VISIBLE);
+                        mTvNumber.setText(String.format(getString(R.string.text_number), mAdapterPhotoChoose.size()));
+                    }
+                }
+                break;
+            case VIDEO:
+                ExportGifVideoActivity.startActivity(this, media);
         }
     }
 
@@ -198,25 +217,29 @@ public class PhotoActivity extends BaseActivity<PhotoPresenter> implements Photo
 
 
     @Override
-    public void onShowListImages(List<FolderImage> folderImages) {
-        mAdapterFolder.setItems(folderImages);
+    public void onShowListImages(List<FolderMedia> folderPhotos) {
+        mAdapterFolder.setItems(folderPhotos);
         mAdapterFolder.refresh();
     }
 
-    public static void startPhotoActivity(Context context, List<Photo> photos) {
-        Intent intent = new Intent(context, PhotoActivity.class);
+    public static void startPhotoActivity(Context context, List<Media> photos) {
+        Intent intent = new Intent(context, GalleryActivity.class);
         if (photos != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO, (ArrayList<? extends Parcelable>) photos);
+            bundle.putInt(Constants.BUNDLE_KEY_MEDIA_TYPE, Constants.TYPE_PHOTO);
             intent.putExtras(bundle);
         }
-
         context.startActivity(intent);
     }
 
-
-    public static void startPhotoActivity(Context context) {
-        startPhotoActivity(context, null);
+    public static void startPhotoActivity(Context context, MediaType mediaType) {
+        Intent intent = new Intent(context, GalleryActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.BUNDLE_KEY_MEDIA_TYPE, mediaType.getCode());
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
+
 }
 

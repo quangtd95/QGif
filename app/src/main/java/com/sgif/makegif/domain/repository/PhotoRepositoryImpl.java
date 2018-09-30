@@ -6,8 +6,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.sgif.makegif.domain.model.FolderImage;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.FolderMedia;
+import com.sgif.makegif.domain.model.Media;
 
 
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import java.util.List;
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class ImageRepositoryImpl implements ImageRepository {
+public class PhotoRepositoryImpl implements MediaRepository {
 
     @Override
-    public List<FolderImage> getFolderImages(Context context) {
-        List<Photo> mPhotos = new ArrayList<>();
+    public List<FolderMedia> getFolderMedia(Context context) {
+        List<Media> mPhotos = new ArrayList<>();
 
         final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID + " DESC";
@@ -39,7 +39,8 @@ public class ImageRepositoryImpl implements ImageRepository {
             String name = cc.getString(1);
             String path = cc.getString(0);
 
-            Photo photo = new Photo();
+            Media photo = new Media();
+            photo.setId(id);
             photo.setUri(uri);
             photo.setPath(path);
             photo.setName(name);
@@ -49,19 +50,19 @@ public class ImageRepositoryImpl implements ImageRepository {
         return new ArrayList<>(getAlbumImage(mPhotos));
     }
 
-    private List<FolderImage> getAlbumImage(List<Photo> photos) {
-        List<FolderImage> folderImages = new ArrayList<>();
+    private List<FolderMedia> getAlbumImage(List<Media> photos) {
+        List<FolderMedia> folderPhotos = new ArrayList<>();
 
-        for (Photo photo : photos) {
-            if (!checkAlbum(folderImages, photo)) {
-                List<Photo> imagesAlbum = new ArrayList<>();
+        for (Media photo : photos) {
+            if (!checkAlbum(folderPhotos, photo)) {
+                List<Media> imagesAlbum = new ArrayList<>();
                 imagesAlbum.add(photo);
-                FolderImage folderImage = new FolderImage(imagesAlbum, getAlbumName(photo.getPath()));
-                folderImage.setPath(getPathAlbum(photo.getPath()));
-                folderImages.add(folderImage);
+                FolderMedia folderPhoto = new FolderMedia(imagesAlbum, getAlbumName(photo.getPath()));
+                folderPhoto.setPath(getPathAlbum(photo.getPath()));
+                folderPhotos.add(folderPhoto);
             }
         }
-        return folderImages;
+        return folderPhotos;
     }
 
     private String getAlbumName(String path) {
@@ -75,12 +76,12 @@ public class ImageRepositoryImpl implements ImageRepository {
         return path.substring(0, path.length() - names[names.length - 1].length());
     }
 
-    private boolean checkAlbum(List<FolderImage> folderImages, Photo photo) {
+    private boolean checkAlbum(List<FolderMedia> folderPhotos, Media photo) {
         boolean check = false;
-        for (int i = 0; i < folderImages.size(); i++) {
-            if (getAlbumName(photo.getPath()).equals(folderImages.get(i).getName())) {
+        for (int i = 0; i < folderPhotos.size(); i++) {
+            if (getAlbumName(photo.getPath()).equals(folderPhotos.get(i).getName())) {
                 check = true;
-                folderImages.get(i).getPhotos().add(photo);
+                folderPhotos.get(i).getListMedia().add(photo);
                 break;
             }
             check = false;

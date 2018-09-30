@@ -1,7 +1,6 @@
-package com.sgif.makegif.view.export;
+package com.sgif.makegif.screen.export;
 
 import android.Manifest;
-import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,12 +26,12 @@ import com.sgif.makegif.common.Constants;
 import com.sgif.makegif.common.base.BaseActivity;
 import com.sgif.makegif.common.listener.AfterTextChangedWatcher;
 import com.sgif.makegif.common.listener.OnSeekBarChangeListener;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.util.DialogUtils;
 import com.sgif.makegif.util.RecyclerViewUtils;
-import com.sgif.makegif.view.complete.CompleteActivity;
-import com.sgif.makegif.view.photo.PhotoActivity;
-import com.sgif.makegif.view.photo.PhotoChooseAdapter;
+import com.sgif.makegif.screen.complete.CompleteActivity;
+import com.sgif.makegif.screen.gallery.GalleryActivity;
+import com.sgif.makegif.screen.gallery.ChooseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.List;
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter> implements PhotoChooseAdapter.OnClickRemoveItemListener, ExportGifPhotoView {
+public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter> implements ChooseAdapter.OnClickRemoveItemListener, ExportGifPhotoView {
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
     private ProgressBar mPgExportGif;
     private SeekBar mSbDelay;
@@ -50,8 +50,9 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     private Button mBtnDefaultDimension;
     private CheckBox mChkKeepRatio;
     private Button mBtnExportGif;
+    private ImageView mImvBack;
 
-    private PhotoChooseAdapter mPhotoChooseAdapter;
+    private ChooseAdapter mChooseAdapter;
 
     @Override
     protected int getIdLayout() {
@@ -61,15 +62,16 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     @Override
     protected void bindData() {
         Bundle bundle = getIntent().getExtras();
-        List<Photo> mPhotoList;
+        List<Media> mPhotoList;
         if (bundle != null) {
             mPhotoList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
-            if (mPhotoList == null || mPhotoList.size() < 2) {
+            if (mPhotoList == null || mPhotoList.size() < Constants.MIN_PHOTO) {
                 DialogUtils.createAlertDialog(this, "Error", "please choose at least 2 photos", this::finish);
             }
-            mPhotoChooseAdapter.setItems(mPhotoList);
-            getPresenter(this).setAdapter(mPhotoChooseAdapter);
+            mChooseAdapter.setItems(mPhotoList);
+            getPresenter(this).setAdapter(mChooseAdapter);
             getPresenter(this).setDefaultDimens();
+            getPresenter(this).setDelay(mSbDelay.getProgress());
             mChkKeepRatio.setChecked(getPresenter(this).isKeepRatio());
         } else {
             finish();
@@ -88,20 +90,18 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mBtnDefaultDimension = findViewById(R.id.btnDefaultDimension);
         mChkKeepRatio = findViewById(R.id.chkKeepRatio);
         mBtnExportGif = findViewById(R.id.btnExportGif);
-
+        mImvBack = findViewById(R.id.imvBack);
         mPgExportGif.setVisibility(View.INVISIBLE);
 
         RecyclerViewUtils.Create().setUpGridHorizontal(this, mRvPhotoChoose, 1);
-        mPhotoChooseAdapter = new PhotoChooseAdapter(this);
-        mRvPhotoChoose.setAdapter(mPhotoChooseAdapter);
+        mChooseAdapter = new ChooseAdapter(this);
+        mRvPhotoChoose.setAdapter(mChooseAdapter);
     }
 
     @Override
     protected void initActions() {
-        mPhotoChooseAdapter.setOnClickRemoveItemListener(this);
-        mSbDelay.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> {
-            getPresenter(this).setDelay(progress);
-        });
+        mChooseAdapter.setOnClickRemoveItemListener(this);
+        mSbDelay.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> getPresenter(this).setDelay(progress));
         mEdtWidth.addTextChangedListener((AfterTextChangedWatcher) s -> {
             // user nhập
             if (mEdtWidth.getTag() == null) {
@@ -128,9 +128,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
             }
             getPresenter(ExportGifPhotoActivity.this).setKeepRatio(mChkKeepRatio.isChecked());
         });
-        mBtnDefaultDimension.setOnClickListener(v -> {
-            getPresenter(ExportGifPhotoActivity.this).setDefaultDimens();
-        });
+        mBtnDefaultDimension.setOnClickListener(v -> getPresenter(ExportGifPhotoActivity.this).setDefaultDimens());
         mBtnExportGif.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -144,11 +142,11 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
             } else {
                 getPresenter(ExportGifPhotoActivity.this).exportGif();
             }
-
         });
+        mImvBack.setOnClickListener(v -> finish());
     }
 
-    public static void startActivity(Context context, ArrayList<Photo> photos) {
+    public static void startActivity(Context context, ArrayList<Media> photos) {
         Intent intent = new Intent(context, ExportGifPhotoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO, photos);
@@ -159,15 +157,15 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
 
     @Override
     public void onRemoveItem(int position) {
-        mPhotoChooseAdapter.removeItem(position);
-        mPhotoChooseAdapter.refreshRemove(position);
-        if (mPhotoChooseAdapter.size() < 2) {
+        mChooseAdapter.removeItem(position);
+        mChooseAdapter.refreshRemove(position);
+        if (mChooseAdapter.size() < Constants.MIN_PHOTO) {
             DialogUtils.createAlertDialog(
                     this,
                     "error",
-                    "please choose at least 2 photos to continue",
+                    "please choose at least " + Constants.MIN_PHOTO + " photos to continue",
                     () -> {
-                        PhotoActivity.startPhotoActivity(this, mPhotoChooseAdapter.getItems());
+                        GalleryActivity.startPhotoActivity(this, mChooseAdapter.getItems());
                         finish();
                     });
         } else {
@@ -178,7 +176,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
 
     @Override
     public void setDuration(float duration) {
-        mTvDuration.setText(String.format(getString(R.string.duration_number), duration));
+        mTvDuration.setText(String.format(getString(R.string.time_format), duration / 1000));
     }
 
     @Override
@@ -233,7 +231,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getPresenter(this).exportGif();
                 } else {
-                    //TODO: nêu lí do cần cấp quyền
+                    DialogUtils.createAlertDialog(this, "", "need write to sdcard permission to process gif");
                 }
                 break;
             }

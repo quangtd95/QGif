@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Make Gif</string>
     <string name="choose_images">Choose Images</string>
-    <string name="choose_video">Choose Video</string>
     <string name="text_please_choose_photo">Please choose some photos</string>
     <string name="text_start">start</string>
     <string name="text_number">[%d / 100]</string>
-    <string name="duration_number">%.02f s</string>
-    <string name="choose_photo">Image</string>
+    <string name="time_format">%.01f s</string>
+    <string name="choose_photo">Photo</string>
+    <string name="choose_video">Video</string>
     <string name="label_delay">Delay</string>
     <string name="label_dimension">Dimension</string>
     <string name="hint_width">width</string>
@@ -14,4 +14,8 @@
     <string name="default_dimension">default dimension</string>
     <string name="keep_ratio">keep ratio</string>
     <string name="export_gif">Export gif</string>
+    <string name="export_gif_from_photo">export gif from photo</string>
+    <string name="export_gif_from_video">export gif from video</string>
+    <string name="start_time">start time:</string>
+    <string name="end_time">end time:</string>
 </resources>

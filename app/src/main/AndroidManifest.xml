@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".view.home.HomeActivity"
+            android:name=".screen.home.HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.photo.PhotoActivity"
+            android:name=".screen.gallery.GalleryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.export.ExportGifPhotoActivity"
+            android:name=".screen.export.ExportGifPhotoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.complete.CompleteActivity"
+            android:name=".screen.complete.CompleteActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".screen.export.ExportGifVideoActivity" />
     </application>
 
 </manifest>

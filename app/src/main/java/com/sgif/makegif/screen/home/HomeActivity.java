@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.home;
+package com.sgif.makegif.screen.home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -11,7 +11,9 @@ import android.widget.Button;
 
 import com.sgif.makegif.R;
 import com.sgif.makegif.common.base.BaseActivity;
-import com.sgif.makegif.view.photo.PhotoActivity;
+import com.sgif.makegif.domain.model.MediaType;
+import com.sgif.makegif.screen.gallery.GalleryActivity;
+import com.sgif.makegif.util.DialogUtils;
 
 
 /**
@@ -24,6 +26,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     private Button mBtnChooseImage;
 
     private Button mBtnChooseVideo;
+
+    private MediaType mMediaType;
 
     @Override
     @LayoutRes
@@ -44,25 +48,25 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
     @Override
     protected void initActions() {
-        mBtnChooseVideo.setOnClickListener(v -> {
+        mBtnChooseVideo.setOnClickListener(v -> openGallery(MediaType.VIDEO));
 
-        });
+        mBtnChooseImage.setOnClickListener(v -> openGallery(MediaType.PHOTO));
+    }
 
-        mBtnChooseImage.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                } else {
-                    PhotoActivity.startPhotoActivity(this);
-                }
+    private void openGallery(MediaType mediaType) {
+        this.mMediaType = mediaType;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                PhotoActivity.startPhotoActivity(this);
+                GalleryActivity.startPhotoActivity(this, mediaType);
             }
-
-        });
+        } else {
+            GalleryActivity.startPhotoActivity(this, mediaType);
+        }
     }
 
     @Override
@@ -71,9 +75,9 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PhotoActivity.startPhotoActivity(this);
+                    GalleryActivity.startPhotoActivity(this, mMediaType);
                 } else {
-                    //TODO: nêu lí do cần cấp quyền
+                    DialogUtils.createAlertDialog(this, "", "need permission to process gif");
                 }
                 break;
             }

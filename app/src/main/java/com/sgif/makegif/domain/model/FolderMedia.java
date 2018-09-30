@@ -4,12 +4,12 @@ import com.sgif.makegif.common.base.BaseModel;
 
 import java.util.List;
 
-public class FolderImage implements BaseModel {
-    private List<Photo> photos;
+public class FolderMedia implements BaseModel {
+    private List<Media> photos;
     private String name;
     private String path;
 
-    public FolderImage(List<Photo> photos, String name) {
+    public FolderMedia(List<Media> photos, String name) {
         this.photos = photos;
         this.name = name;
     }
@@ -22,7 +22,7 @@ public class FolderImage implements BaseModel {
         this.path = path;
     }
 
-    public List<Photo> getPhotos() {
+    public List<Media> getListMedia() {
         return photos;
     }
 

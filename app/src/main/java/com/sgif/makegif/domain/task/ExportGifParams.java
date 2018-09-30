@@ -1,6 +1,7 @@
 package com.sgif.makegif.domain.task;
 
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.Media;
+import com.sgif.makegif.domain.model.MediaType;
 
 import java.util.List;
 
@@ -9,10 +10,18 @@ import java.util.List;
  * on 9/29/2018.
  */
 public class ExportGifParams {
+    private MediaType mediaType;
     private int delay;
     private int width;
     private int height;
-    private List<Photo> photos;
+    private List<Media> photos;
+    private Media video;
+    private int startTime;
+    private int endTime;
+
+    public ExportGifParams(MediaType mediaType) {
+        this.mediaType = mediaType;
+    }
 
     public int getDelay() {
         return delay;
@@ -38,11 +47,43 @@ public class ExportGifParams {
         this.height = height;
     }
 
-    public List<Photo> getPhotos() {
+    public List<Media> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<Photo> photos) {
+    public void setPhotos(List<Media> photos) {
         this.photos = photos;
+    }
+
+    public Media getVideo() {
+        return video;
+    }
+
+    public void setVideo(Media video) {
+        this.video = video;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
+
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(MediaType mediaType) {
+        this.mediaType = mediaType;
     }
 }

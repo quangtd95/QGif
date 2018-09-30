@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import com.sgif.makegif.util.DialogUtils;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Objects;
 
 /**
  * Created by quang.td95@gmail.com
@@ -30,6 +31,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         initViews();
         bindData();
         initActions();
+        Objects.requireNonNull(getSupportActionBar()).hide();
     }
 
     @LayoutRes
@@ -69,14 +71,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         builder.setMessage(message);
         builder.setNegativeButton("OK", null);
         builder.show();
-    }
-
-    public void updateStatusBarColor(String color) {// Color must be in hexadecimal format
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor(color));
-        }
     }
 
     @Override

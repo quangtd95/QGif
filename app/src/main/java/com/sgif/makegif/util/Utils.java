@@ -3,10 +3,7 @@ package com.sgif.makegif.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -16,12 +13,8 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
-
-import com.sgif.makegif.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,7 +29,6 @@ import java.util.Locale;
  */
 public class Utils {
 
-    private static Dialog dialog;
     private static int screenWidth = -1;
 
 
@@ -200,7 +192,7 @@ public class Utils {
     public static Bitmap getThumbnail(String videoPath, float msDuration) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(videoPath);
-        Bitmap bitmap = retriever.getFrameAtTime((long) (msDuration * 1000), MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        Bitmap bitmap = retriever.getFrameAtTime((long) (msDuration * 1000), MediaMetadataRetriever.OPTION_CLOSEST);
         retriever.release();
         return bitmap;
     }

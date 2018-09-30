@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.export;
+package com.sgif.makegif.screen.export;
 
 import com.sgif.makegif.common.base.BaseView;
 

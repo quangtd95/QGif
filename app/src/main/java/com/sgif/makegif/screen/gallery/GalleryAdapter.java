@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.photo;
+package com.sgif.makegif.screen.gallery;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,15 +11,15 @@ import com.sgif.makegif.R;
 import com.sgif.makegif.common.GlideApp;
 import com.sgif.makegif.common.base.BaseAdapter;
 import com.sgif.makegif.common.base.BaseViewHolder;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.util.Utils;
 
 import java.io.File;
 
 
-public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.ItemViewHolder> {
+public class GalleryAdapter extends BaseAdapter<Media, GalleryAdapter.ItemViewHolder> {
     public interface OnClickItemPhotoListener {
-        void onClickItemPhoto(Photo photo);
+        void onClickItemMedia(Media photo);
     }
 
     private final int mSizeImage;
@@ -29,7 +29,7 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.ItemViewHolder
         this.mOnClickItemHomeListener = onClickItemHomeListener;
     }
 
-    PhotoAdapter(Context context) {
+    GalleryAdapter(Context context) {
         super(context);
         mSizeImage = (Utils.getScreenWidth(mContext) - 2 * Utils.convertDpToPixel(mContext, 5)) / 3;
     }
@@ -46,7 +46,7 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.ItemViewHolder
         return size();
     }
 
-    public class ItemViewHolder extends BaseViewHolder<Photo> implements View.OnClickListener {
+    public class ItemViewHolder extends BaseViewHolder<Media> implements View.OnClickListener {
 
         private ImageView mImgPhoto;
 
@@ -61,7 +61,7 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.ItemViewHolder
         }
 
         @Override
-        public void bindData(Photo photo) {
+        public void bindData(Media photo) {
             String link = photo.getPath();
             if (link != null) {
                 GlideApp
@@ -76,7 +76,7 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.ItemViewHolder
         @Override
         public void onClick(View v) {
             if (mOnClickItemHomeListener != null) {
-                mOnClickItemHomeListener.onClickItemPhoto(getItem(getLayoutPosition()));
+                mOnClickItemHomeListener.onClickItemMedia(getItem(getLayoutPosition()));
             }
         }
     }

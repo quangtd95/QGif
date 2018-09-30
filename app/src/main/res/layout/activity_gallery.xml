@@ -18,7 +18,7 @@
             android:layout_height="@dimen/height_header">
 
             <ImageView
-                android:id="@+id/imgBack"
+                android:id="@+id/imvBack"
                 android:layout_width="@dimen/height_header"
                 android:layout_height="match_parent"
                 android:padding="@dimen/dip12"
@@ -28,19 +28,12 @@
                 android:id="@+id/tvNameFolder"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toEndOf="@+id/imgBack"
+                android:layout_toEndOf="@+id/imvBack"
                 android:gravity="start|center_vertical"
                 android:text="@string/choose_photo"
                 android:textSize="@dimen/dip18"
                 android:textColor="@color/color_dark_gray" />
 
-            <ImageView
-                android:id="@+id/imgSort"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:padding="10dp"
-                android:src="@drawable/ic_sort_descending" />
         </RelativeLayout>
 
         <View

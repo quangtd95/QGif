@@ -1,29 +1,30 @@
-package com.sgif.makegif.view.export;
+package com.sgif.makegif.screen.export;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.sgif.makegif.common.Constants;
 import com.sgif.makegif.common.base.BasePresenter;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.Media;
+import com.sgif.makegif.domain.model.MediaType;
 import com.sgif.makegif.domain.task.ExportGifParams;
 import com.sgif.makegif.domain.task.ExportPhotoGifTask;
-import com.sgif.makegif.view.photo.PhotoChooseAdapter;
-
-import java.util.List;
+import com.sgif.makegif.domain.task.OnExportGifCallback;
+import com.sgif.makegif.util.Utils;
 
 /**
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> implements ExportPhotoGifTask.OnExportPhotoGifCallback {
-    private PhotoChooseAdapter mPhotoAdapter;
+public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> implements OnExportGifCallback {
+    private Media mVideo;
 
     //always milliseconds
     private int mDelay = Constants.DEFAULT_DELAY;
+
+    private int mStartTime;
+
+    private int mEndTime;
 
     private int mWidth;
 
@@ -38,20 +39,11 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     private boolean mKeepRatio = true;
 
 
-    public void calculateDefaultDimens() {
-        mDefaultWidth = 1;
-        mDefaultHeight = 1;
-        List<Photo> photoList = mPhotoAdapter.getItems();
-        for (Photo photo : photoList) {
-            String path = photo.getPath();
-            if (!TextUtils.isEmpty(path)) {
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                if (bitmap != null) {
-                    if (bitmap.getWidth() > mDefaultWidth) mDefaultWidth = bitmap.getWidth();
-                    if (bitmap.getHeight() > mDefaultHeight) mDefaultHeight = bitmap.getHeight();
-                }
-            }
-        }
+    private void calculateDefaultValues() {
+        Bitmap bitmap = Utils.getThumbnail(mVideo.getPath(), 0);
+        mDefaultWidth = bitmap.getWidth();
+        mDefaultHeight = bitmap.getHeight();
+
         ratio = mDefaultWidth * 1.0f / mDefaultHeight;
         if (mDefaultWidth > Constants.DEFAULT_WIDTH) {
             mDefaultWidth = Constants.DEFAULT_WIDTH;
@@ -63,17 +55,19 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         }
         mWidth = mDefaultWidth;
         mHeight = mDefaultHeight;
+        mStartTime = 0;
+        mEndTime = mVideo.getDuration();
     }
 
-    public void setAdapter(PhotoChooseAdapter photoChooseAdapter) {
-        this.mPhotoAdapter = photoChooseAdapter;
-        calculateDefaultDimens();
+    public void setVideo(Media video) {
+        this.mVideo = video;
+        calculateDefaultValues();
     }
 
     public void setDelay(int delay) {
         float range = Constants.MAX_DELAY - Constants.MIN_DELAY;
         this.mDelay = (int) (delay * 1.0f / 100 * range + Constants.MIN_DELAY);
-        getView().setDuration(mDelay);
+        getView().setDelay(mDelay);
     }
 
     public void setWidth(int width) {
@@ -131,7 +125,7 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     }
 
     public void exportGif() {
-        ExportGifParams params = new ExportGifParams();
+        ExportGifParams params = new ExportGifParams(MediaType.VIDEO);
         if (mDelay > Constants.MAX_DELAY || mDelay < Constants.MIN_DELAY) {
             getView().showNotifyDialog("delay time is not correct");
             return;
@@ -150,12 +144,19 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         } else {
             params.setHeight(mHeight);
         }
-        if (mPhotoAdapter.size() < Constants.MIN_PHOTO || mPhotoAdapter.size() > Constants.MAX_PHOTO) {
-            getView().showNotifyDialog("list photos are not correct");
-            return;
+        if (mVideo != null) {
+            if (mStartTime >= mEndTime || mStartTime < 0 || mStartTime > mVideo.getDuration() || mEndTime < 0 || mEndTime > mVideo.getDuration()) {
+                getView().showNotifyDialog("time is not correct");
+            } else {
+                params.setVideo(mVideo);
+                params.setStartTime(mStartTime);
+                params.setEndTime(mEndTime != 0 ? mEndTime : mVideo.getDuration());
+            }
         } else {
-            params.setPhotos(mPhotoAdapter.getItems());
+            getView().showNotifyDialog("video is not correct");
         }
+
+
         ExportPhotoGifTask gifTask = new ExportPhotoGifTask(this);
         gifTask.execute(params);
     }
@@ -180,5 +181,20 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     @Override
     public void onPrepareExportGif() {
         getView().onPrepareExport();
+    }
+
+
+    public void setStartTime(int progress) {
+        this.mStartTime = (int) (progress * 1.0f / 100 * mVideo.getDuration());
+        if (mStartTime <= 0) mStartTime = 0;
+        if (mStartTime >= mEndTime) mStartTime = mEndTime;
+        getView().setStartTimeProgress((int) (mStartTime * 1.0f / mVideo.getDuration() * 100), mStartTime);
+    }
+
+    public void setEndTime(int progress) {
+        this.mEndTime = (int) (progress * 1.0f / 100 * mVideo.getDuration());
+        if (mEndTime >= mVideo.getDuration()) mEndTime = mVideo.getDuration();
+        if (mEndTime <= mStartTime) mEndTime = mStartTime;
+        getView().setEndTimeProgress((int) (mEndTime * 1.0f / mVideo.getDuration() * 100), mEndTime);
     }
 }

@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.complete;
+package com.sgif.makegif.screen.complete;
 
 import android.content.Context;
 import android.content.Intent;

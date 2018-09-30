@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.complete;
+package com.sgif.makegif.screen.complete;
 
 import com.sgif.makegif.common.base.BasePresenter;
 
@@ -6,5 +6,5 @@ import com.sgif.makegif.common.base.BasePresenter;
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class CompletePresenter extends BasePresenter<CompleteView> {
+class CompletePresenter extends BasePresenter<CompleteView> {
 }

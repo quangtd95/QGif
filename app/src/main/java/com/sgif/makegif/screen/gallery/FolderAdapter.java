@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.photo;
+package com.sgif.makegif.screen.gallery;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,14 +12,14 @@ import com.sgif.makegif.R;
 import com.sgif.makegif.common.GlideApp;
 import com.sgif.makegif.common.base.BaseAdapter;
 import com.sgif.makegif.common.base.BaseViewHolder;
-import com.sgif.makegif.domain.model.FolderImage;
+import com.sgif.makegif.domain.model.FolderMedia;
 
 import java.io.File;
 
 
-public class FolderAdapter extends BaseAdapter<FolderImage, FolderAdapter.ItemViewHolder> {
+public class FolderAdapter extends BaseAdapter<FolderMedia, FolderAdapter.ItemViewHolder> {
     public interface OnClickItemFolderListener {
-        void onClickFolder(FolderImage folderImage);
+        void onClickFolder(FolderMedia folderPhoto);
     }
 
     private OnClickItemFolderListener mOnClickItemFolderListener;
@@ -40,7 +40,7 @@ public class FolderAdapter extends BaseAdapter<FolderImage, FolderAdapter.ItemVi
     }
 
 
-    public class ItemViewHolder extends BaseViewHolder<FolderImage> {
+    public class ItemViewHolder extends BaseViewHolder<FolderMedia> {
         private TextView tvNameFolder;
         private TextView tvPathFolder;
         private ImageView imgFolder;
@@ -59,10 +59,10 @@ public class FolderAdapter extends BaseAdapter<FolderImage, FolderAdapter.ItemVi
         }
 
         @Override
-        public void bindData(FolderImage folderImage) {
-            tvNameFolder.setText(folderImage.getName());
-            tvPathFolder.setText(folderImage.getPath());
-            GlideApp.with(mContext).load(new File(folderImage.getFirstImage())).centerCrop().override(150, 150).into(imgFolder);
+        public void bindData(FolderMedia folderPhoto) {
+            tvNameFolder.setText(folderPhoto.getName());
+            tvPathFolder.setText(folderPhoto.getPath());
+            GlideApp.with(mContext).load(new File(folderPhoto.getFirstImage())).centerCrop().override(150, 150).into(imgFolder);
         }
     }
 }

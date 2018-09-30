@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.photo;
+package com.sgif.makegif.screen.gallery;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,12 +11,12 @@ import com.sgif.makegif.R;
 import com.sgif.makegif.common.GlideApp;
 import com.sgif.makegif.common.base.BaseAdapter;
 import com.sgif.makegif.common.base.BaseViewHolder;
-import com.sgif.makegif.domain.model.Photo;
+import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.util.Utils;
 
 import java.io.File;
 
-public class PhotoChooseAdapter extends BaseAdapter<Photo, PhotoChooseAdapter.ItemViewHolder> {
+public class ChooseAdapter extends BaseAdapter<Media, ChooseAdapter.ItemViewHolder> {
 
     public interface OnClickRemoveItemListener {
         void onRemoveItem(int position);
@@ -25,7 +25,7 @@ public class PhotoChooseAdapter extends BaseAdapter<Photo, PhotoChooseAdapter.It
     private OnClickRemoveItemListener mOnClickRemoveItemListener;
     private int mSizeImage;
 
-    public PhotoChooseAdapter(Context context) {
+    public ChooseAdapter(Context context) {
         super(context);
         mSizeImage = Utils.convertDpToPixel(mContext, 70);
     }
@@ -42,7 +42,7 @@ public class PhotoChooseAdapter extends BaseAdapter<Photo, PhotoChooseAdapter.It
     }
 
 
-    class ItemViewHolder extends BaseViewHolder<Photo> {
+    class ItemViewHolder extends BaseViewHolder<Media> {
         private ImageView imgRemove;
         private ImageView imgChoose;
 
@@ -63,7 +63,7 @@ public class PhotoChooseAdapter extends BaseAdapter<Photo, PhotoChooseAdapter.It
         }
 
         @Override
-        public void bindData(Photo photo) {
+        public void bindData(Media photo) {
             GlideApp.with(mContext).load(new File(photo.getPath()))
                     .centerCrop()
                     .override(mSizeImage, mSizeImage)

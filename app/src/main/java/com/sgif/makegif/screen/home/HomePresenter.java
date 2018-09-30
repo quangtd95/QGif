@@ -1,4 +1,4 @@
-package com.sgif.makegif.view.home;
+package com.sgif.makegif.screen.home;
 
 import com.sgif.makegif.common.base.BasePresenter;
 

@@ -6,28 +6,32 @@ import android.os.Parcelable;
 
 import com.sgif.makegif.common.base.BaseModel;
 
-public class Photo implements Parcelable, BaseModel {
+public class Media implements Parcelable, BaseModel {
     private Uri uri;
     private String path;
     private String name;
     private boolean select;
+    private int duration;
+    private int id;
 
-    protected Photo(Parcel in) {
+    protected Media(Parcel in) {
+        id = in.readInt();
         uri = in.readParcelable(Uri.class.getClassLoader());
         path = in.readString();
         name = in.readString();
         select = in.readByte() != 0;
+        duration = in.readInt();
     }
 
-    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+    public static final Creator<Media> CREATOR = new Creator<Media>() {
         @Override
-        public Photo createFromParcel(Parcel in) {
-            return new Photo(in);
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
         }
 
         @Override
-        public Photo[] newArray(int size) {
-            return new Photo[size];
+        public Media[] newArray(int size) {
+            return new Media[size];
         }
     };
 
@@ -39,11 +43,14 @@ public class Photo implements Parcelable, BaseModel {
         this.select = select;
     }
 
-    public Photo() {
+    public Media() {
     }
 
-    public Uri getUri() {
-        return uri;
+    public Media(int id, String path, String name, int duration) {
+        this.id = id;
+        this.path = path;
+        this.name = name;
+        this.duration = duration;
     }
 
     public void setUri(Uri uri) {
@@ -71,11 +78,29 @@ public class Photo implements Parcelable, BaseModel {
         return 0;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeParcelable(uri, flags);
         dest.writeString(path);
         dest.writeString(name);
         dest.writeByte((byte) (select ? 1 : 0));
+        dest.writeInt(duration);
     }
 }
