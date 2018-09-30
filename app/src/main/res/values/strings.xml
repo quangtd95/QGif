@@ -18,4 +18,5 @@
     <string name="export_gif_from_video">export gif from video</string>
     <string name="start_time">start time:</string>
     <string name="end_time">end time:</string>
+    <string name="need_permission">need permission to sdcard to save gif</string>
 </resources>

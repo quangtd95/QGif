@@ -38,7 +38,16 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
 
     private boolean mKeepRatio = true;
 
-
+    /**
+     * <p>tính toán kích thước width, height mặc định cho gif</p>
+     * <br/>
+     * <p>lựa chọn nhiều hình ảnh, có thể nhiều kích thước khác nhau
+     * nên cần chọn ra 1 giá trị để export gif.
+     * hiện tại đang lựa chọn giá trị là max width và max height của list ảnh</p>
+     * <br/>
+     * <p>
+     * ratio lưu giữ tỉ lệ của width và height.
+     */
     public void calculateDefaultDimens() {
         mDefaultWidth = 1;
         mDefaultHeight = 1;
@@ -71,9 +80,9 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         calculateDefaultDimens();
     }
 
-    public void setDelay(int delay) {
+    public void setDelay(int progress) {
         float range = Constants.MAX_DELAY - Constants.MIN_DELAY;
-        this.mDelay = (int) (delay * 1.0f / 100 * range + Constants.MIN_DELAY);
+        this.mDelay = (int) (progress * 1.0f / 100 * range + Constants.MIN_DELAY);
         getView().setDuration(mDelay);
     }
 

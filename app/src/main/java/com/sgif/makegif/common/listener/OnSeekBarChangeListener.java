@@ -9,12 +9,12 @@ import android.widget.SeekBar;
 public interface OnSeekBarChangeListener extends SeekBar.OnSeekBarChangeListener {
 
     @Override
-    default public void onStartTrackingTouch(SeekBar seekBar) {
+    default void onStartTrackingTouch(SeekBar seekBar) {
 
     }
 
     @Override
-    default public void onStopTrackingTouch(SeekBar seekBar) {
+    default void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 }

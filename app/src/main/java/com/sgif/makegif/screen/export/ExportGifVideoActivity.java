@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -117,12 +116,15 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initActions() {
+
         mVideoView.setOnPreparedListener(mp -> {
+            //chạy video
             mp.seekTo(0);
             mp.setVolume(0f, 0f);
             mp.start();
             setupVideoControl();
         });
+
         mSbStartTime.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> {
             if (fromUser) {
                 mVideoView.pause();
@@ -135,9 +137,13 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
                 getPresenter(this).setEndTime(progress);
             }
         });
-        mSbDelay.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> getPresenter(this).setDelay(progress));
+        mSbDelay.setOnSeekBarChangeListener((OnSeekBarChangeListener) (seekBar, progress, fromUser) -> {
+            getPresenter(this).setDelay(progress);
+        });
+
         mEdtWidth.addTextChangedListener((AfterTextChangedWatcher) s -> {
-            // user nhập
+            //tag = null khi user gõ vào edit text
+            // chỉ xử lý khi user gõ
             if (mEdtWidth.getTag() == null) {
                 if (TextUtils.isEmpty(s)) {
                     getPresenter(ExportGifVideoActivity.this).setWidth(0);
@@ -146,6 +152,7 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
                 }
             }
         });
+
         mEdtHeight.addTextChangedListener((AfterTextChangedWatcher) s -> {
             // user nhập
             if (mEdtHeight.getTag() == null) {
@@ -156,13 +163,19 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
                 }
             }
         });
+
         mChkKeepRatio.setOnClickListener(v -> {
             if (mChkKeepRatio.isChecked()) {
                 getPresenter(ExportGifVideoActivity.this).setDefaultDimens();
             }
             getPresenter(ExportGifVideoActivity.this).setKeepRatio(mChkKeepRatio.isChecked());
         });
-        mBtnDefaultDimension.setOnClickListener(v -> getPresenter(ExportGifVideoActivity.this).setDefaultDimens());
+
+        // set lại giá trị mặc định cho dimension.
+        mBtnDefaultDimension.setOnClickListener(v -> {
+            getPresenter(ExportGifVideoActivity.this).setDefaultDimens();
+        });
+
         mBtnExportGif.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -187,7 +200,6 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
-
 
     @Override
     public void setDelay(float delayMs) {
@@ -258,7 +270,6 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
         if (!mVideoView.isPlaying()) {
             mVideoView.start();
         }
-
     }
 
     @Override
@@ -269,7 +280,7 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getPresenter(this).exportGif();
                 } else {
-                    DialogUtils.createAlertDialog(this, "", "need write permission to sdcard to save gif");
+                    DialogUtils.createAlertDialog(this, "", getString(R.string.need_permission));
                 }
                 break;
             }

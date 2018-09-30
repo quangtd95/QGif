@@ -2,7 +2,6 @@ package com.sgif.makegif.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -14,13 +13,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -70,20 +66,13 @@ public class Utils {
      * @param context valid context
      * @return DisplayMetrics object
      */
-    static DisplayMetrics getDisplayMetrics(final Context context) {
+    private static DisplayMetrics getDisplayMetrics(final Context context) {
         final WindowManager
                 windowManager =
                 (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
         return metrics;
-    }
-
-    public static void resizeView(View view, int width, int height) {
-        ViewGroup.LayoutParams layout = view.getLayoutParams();
-        layout.width = width;
-        layout.height = height;
-        view.setLayoutParams(layout);
     }
 
     public static int convertDpToPixel(Context context, int dp) {
@@ -93,40 +82,9 @@ public class Utils {
     }
 
     /**
-     * @param duration second
-     * @return 00:00
+     * @param timeStamp thời gian cần đổi
+     * @return định dạng MM-dd-yyyy_hh-mm-ss
      */
-    public static String convertDurationToString(int duration) {
-        if (duration < 60) return ":" + duration;
-        int minute = duration / 60;
-        int second = duration % 60;
-        return minute + ":" + (second >= 10 ? second : "0" + second);
-    }
-
-    /**
-     * @param time: milisecond
-     * @return 00:00:00.000
-     */
-    public static String convertLongDurationToString(long time) {
-        if (time < 0) return "00:00:00.000";
-        int seconds = (int) (time / 1000);
-        int miliseconds = (int) (time - seconds * 1000);
-        int minutes = seconds / 60;
-        seconds = seconds - minutes * 60;
-        int hours = minutes / 60;
-        minutes = minutes - hours * 60;
-        String s_miliseconds = "";
-        if (miliseconds < 10) s_miliseconds = String.format(Locale.US, "00%d", miliseconds);
-        else if (miliseconds < 100) s_miliseconds = String.format(Locale.US, "0%d", miliseconds);
-        else if (miliseconds < 1000) s_miliseconds = String.format(Locale.US, "%d", miliseconds);
-        return String.format(Locale.US, "%s:%s:%s.%s",
-                ((hours < 10) ? "0" : "") + hours,
-                ((minutes < 10) ? "0" : "") + minutes,
-                ((seconds < 10) ? "0" : "") + seconds,
-                s_miliseconds);
-    }
-
-
     public static String parseTimeStampToString(long timeStamp) {
         try {
             DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy_hh-mm-ss", Locale.US);
@@ -138,56 +96,10 @@ public class Utils {
     }
 
 
-    public static List<Bitmap> getThumbnails(String videoPath, float msDuration, int number, int width, int height) {
-        List<Bitmap> bitmaps = new ArrayList<>();
-        try {
-            float step = msDuration / number;
-            for (int i = 0; i < number; i++) {
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(videoPath);
-                Bitmap bitmapOrigin = retriever.getFrameAtTime((long) (i * step * 1000));
-                Bitmap bitmap = Bitmap.createScaledBitmap(cropBitmap(bitmapOrigin), width, height, true);
-                bitmaps.add(bitmap);
-            }
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-        return bitmaps;
-    }
-
-    public static Bitmap getThumbnail(String videoPath, float msDuration, int width, int height) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(videoPath);
-        Bitmap bitmapOrigin = retriever.getFrameAtTime((long) (msDuration * 1000));
-        return Bitmap.createScaledBitmap(cropBitmap(bitmapOrigin), width, height, true);
-    }
-
-    private static Bitmap cropBitmap(Bitmap srcBmp) {
-        Bitmap dstBmp;
-        int w = srcBmp.getWidth();
-        int h = srcBmp.getHeight();
-        dstBmp = Bitmap.createBitmap(srcBmp, w / 2 - h / 4, 0, h / 2, h);
-        return dstBmp;
-    }
-
-    public static void showKeyboard(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (view.requestFocus()) {
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-        }
-    }
-
-    public static void hideKeyboard(Context context, View v) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
-    }
-
     /**
-     * @param videoPath
-     * @param msDuration : miliseconds
-     * @return
+     * @param videoPath  : đường dẫn của video
+     * @param msDuration : đơn vị millisecond
+     * @return thumbnail của video tại thời gian msDuration
      */
     public static Bitmap getThumbnail(String videoPath, float msDuration) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -197,6 +109,17 @@ public class Utils {
         return bitmap;
     }
 
+    /**
+     * <p>Hàm tính toán matrix khi draw bitmap source lên bitmap đích</p>
+     * <br/>
+     * <br/>
+     *
+     * @param srcWidth  : width của bitmap source
+     * @param srcHeight : height của bitmap source
+     * @param desWidth  : width của bitmap đích
+     * @param desHeight : height của bitmap dích
+     * @return <p>kết quả sẽ là matrix để bitmap source nằm ở trung tâm bitmap đích</p>
+     */
     public static Matrix getMatrix(int srcWidth, int srcHeight, int desWidth, int desHeight) {
         Matrix matrix = new Matrix();
         float scaleX;
