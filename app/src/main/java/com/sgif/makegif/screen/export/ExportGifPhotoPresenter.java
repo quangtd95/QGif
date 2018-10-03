@@ -11,7 +11,7 @@ import com.sgif.makegif.domain.model.MediaType;
 import com.sgif.makegif.domain.task.OnExportGifCallback;
 import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.domain.task.ExportGifParams;
-import com.sgif.makegif.domain.task.ExportPhotoGifTask;
+import com.sgif.makegif.domain.task.ExportGifTask;
 import com.sgif.makegif.screen.gallery.ChooseAdapter;
 
 import java.util.List;
@@ -166,7 +166,7 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         } else {
             params.setPhotos(mPhotoAdapter.getItems());
         }
-        ExportPhotoGifTask gifTask = new ExportPhotoGifTask(this);
+        ExportGifTask gifTask = new ExportGifTask(this);
         gifTask.execute(params);
     }
 

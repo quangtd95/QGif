@@ -229,6 +229,10 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
 
     @Override
     public void onPrepareExport() {
+        if (mVideoView.isPlaying()) {
+            mVideoView.pause();
+            mVideoView.stopPlayback();
+        }
         mPgExportGif.setVisibility(View.VISIBLE);
         showLoading();
     }

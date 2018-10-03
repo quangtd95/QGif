@@ -21,11 +21,11 @@ import java.util.List;
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class ExportPhotoGifTask extends AsyncTask<ExportGifParams, Float, String> {
+public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
     private OnExportGifCallback mCallback;
     private String mResultPath;
 
-    public ExportPhotoGifTask(OnExportGifCallback callback) {
+    public ExportGifTask(OnExportGifCallback callback) {
         this.mCallback = callback;
     }
 

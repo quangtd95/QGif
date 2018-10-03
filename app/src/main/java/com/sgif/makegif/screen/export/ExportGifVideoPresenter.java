@@ -8,7 +8,7 @@ import com.sgif.makegif.common.base.BasePresenter;
 import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.domain.model.MediaType;
 import com.sgif.makegif.domain.task.ExportGifParams;
-import com.sgif.makegif.domain.task.ExportPhotoGifTask;
+import com.sgif.makegif.domain.task.ExportGifTask;
 import com.sgif.makegif.domain.task.OnExportGifCallback;
 import com.sgif.makegif.util.Utils;
 
@@ -157,7 +157,7 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
         }
 
 
-        ExportPhotoGifTask gifTask = new ExportPhotoGifTask(this);
+        ExportGifTask gifTask = new ExportGifTask(this);
         gifTask.execute(params);
     }
 

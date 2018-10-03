@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
@@ -95,18 +96,24 @@ public class Utils {
         }
     }
 
+    private static String sVideoPath;
+    private static MediaMetadataRetriever retriever;
 
     /**
      * @param videoPath  : đường dẫn của video
      * @param msDuration : đơn vị millisecond
      * @return thumbnail của video tại thời gian msDuration
      */
-    public static Bitmap getThumbnail(String videoPath, float msDuration) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(videoPath);
-        Bitmap bitmap = retriever.getFrameAtTime((long) (msDuration * 1000), MediaMetadataRetriever.OPTION_CLOSEST);
-        retriever.release();
-        return bitmap;
+    public synchronized static Bitmap getThumbnail(String videoPath, float msDuration) {
+        if (!TextUtils.isEmpty(videoPath) && !videoPath.equals(sVideoPath)) {
+            if (retriever != null) {
+                retriever.release();
+            }
+            retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(videoPath);
+            sVideoPath = videoPath;
+        }
+        return retriever.getFrameAtTime((long) (msDuration * 1000), MediaMetadataRetriever.OPTION_CLOSEST);
     }
 
     /**
