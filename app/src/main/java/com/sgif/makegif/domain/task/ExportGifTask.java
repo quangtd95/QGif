@@ -8,7 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 
-import com.sgif.makegif.common.Constants;
 import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.domain.model.MediaType;
 import com.sgif.makegif.util.Utils;
@@ -23,7 +22,6 @@ import java.util.List;
  */
 public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
     private OnExportGifCallback mCallback;
-    private String mResultPath;
 
     public ExportGifTask(OnExportGifCallback callback) {
         this.mCallback = callback;
@@ -33,7 +31,7 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
     protected String doInBackground(ExportGifParams... exportGifParams) {
         try {
             encodeGif(exportGifParams[0]);
-            return mResultPath;
+            return exportGifParams[0].getResultPath();
         } catch (IOException e) {
             e.printStackTrace();
             onCancelled(e.getLocalizedMessage());
@@ -51,7 +49,6 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         mCallback.onPrepareExportGif();
-        mResultPath = String.format(Constants.RESULT_PATH, Utils.parseTimeStampToString(System.currentTimeMillis()));
     }
 
     @Override
@@ -70,10 +67,10 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
         MediaType mediaType = params.getMediaType();
         int width = params.getWidth();
         int height = params.getHeight();
-        int delayMs = params.getDelay();
+        int delayMs = params.getDelay() == 0 ? 10 : params.getDelay();
 
         GifEncoder gifEncoder = new GifEncoder();
-        gifEncoder.init(width, height, mResultPath, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST);
+        gifEncoder.init(width, height, params.getResultPath(), GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST);
         gifEncoder.setDither(true);
         Bitmap destBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(destBitmap);
@@ -112,5 +109,4 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
 
         gifEncoder.close();
     }
-
 }

@@ -1,16 +1,29 @@
 package com.sgif.makegif.screen.export;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.sgif.makegif.common.Constants;
 import com.sgif.makegif.common.base.BasePresenter;
 import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.domain.model.MediaType;
+import com.sgif.makegif.domain.task.ExportGifFfmpeg;
 import com.sgif.makegif.domain.task.ExportGifParams;
 import com.sgif.makegif.domain.task.ExportGifTask;
 import com.sgif.makegif.domain.task.OnExportGifCallback;
 import com.sgif.makegif.util.Utils;
+
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
+import nl.bravobit.ffmpeg.FFmpeg;
 
 /**
  * Created by quang.td95@gmail.com
@@ -147,6 +160,7 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
         if (mVideo != null) {
             if (mStartTime >= mEndTime || mStartTime < 0 || mStartTime > mVideo.getDuration() || mEndTime < 0 || mEndTime > mVideo.getDuration()) {
                 getView().showNotifyDialog("time is not correct");
+                return;
             } else {
                 params.setVideo(mVideo);
                 params.setStartTime(mStartTime);
@@ -154,11 +168,18 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
             }
         } else {
             getView().showNotifyDialog("video is not correct");
+            return;
         }
+        params.setResultPath(String.format(Constants.RESULT_PATH, Utils.parseTimeStampToString(System.currentTimeMillis())));
 
-
-        ExportGifTask gifTask = new ExportGifTask(this);
-        gifTask.execute(params);
+        FFmpeg fFmpeg = FFmpeg.getInstance(getContext());
+        if (fFmpeg.isSupported()) {
+            ExportGifFfmpeg exportGifFfmpeg = new ExportGifFfmpeg(fFmpeg, this);
+            exportGifFfmpeg.execute(params);
+        } else {
+            ExportGifTask gifTask = new ExportGifTask(this);
+            gifTask.execute(params);
+        }
     }
 
     @Override

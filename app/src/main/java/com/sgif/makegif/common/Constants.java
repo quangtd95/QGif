@@ -20,8 +20,8 @@ public class Constants {
     public static final int MAX_PHOTO = 100;
     public static final int MIN_PHOTO = 2;
 
-    public static final int MAX_DELAY = 2000;
-    public static final int MIN_DELAY = 100;
+    public static final int MAX_DELAY = 1000;
+    public static final int MIN_DELAY = 0;
 
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;

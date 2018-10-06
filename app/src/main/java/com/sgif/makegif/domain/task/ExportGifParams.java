@@ -18,9 +18,18 @@ public class ExportGifParams {
     private Media video;
     private int startTime;
     private int endTime;
+    private String resultPath;
 
     public ExportGifParams(MediaType mediaType) {
         this.mediaType = mediaType;
+    }
+
+    public String getResultPath() {
+        return resultPath;
+    }
+
+    public void setResultPath(String resultPath) {
+        this.resultPath = resultPath;
     }
 
     public int getDelay() {

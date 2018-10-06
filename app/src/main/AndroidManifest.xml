@@ -31,7 +31,9 @@
         <activity
             android:name=".screen.complete.CompleteActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".screen.export.ExportGifVideoActivity" />
+        <activity
+            android:name=".screen.export.ExportGifVideoActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

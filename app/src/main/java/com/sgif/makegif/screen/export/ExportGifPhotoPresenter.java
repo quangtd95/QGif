@@ -13,6 +13,7 @@ import com.sgif.makegif.domain.model.Media;
 import com.sgif.makegif.domain.task.ExportGifParams;
 import com.sgif.makegif.domain.task.ExportGifTask;
 import com.sgif.makegif.screen.gallery.ChooseAdapter;
+import com.sgif.makegif.util.Utils;
 
 import java.util.List;
 
@@ -166,6 +167,7 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         } else {
             params.setPhotos(mPhotoAdapter.getItems());
         }
+        params.setResultPath(String.format(Constants.RESULT_PATH, Utils.parseTimeStampToString(System.currentTimeMillis())));
         ExportGifTask gifTask = new ExportGifTask(this);
         gifTask.execute(params);
     }
