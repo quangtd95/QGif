@@ -15,4 +15,29 @@
     <color name="light_gray">#ceced2</color>
     <color name="text_color_header">#30334e</color>
     <color name="text_color_folder">#4d4d4f</color>
+
+    <!--splash-->
+
+    <color name="colorWhite">@android:color/white</color>
+    <color name="colorBlack">@android:color/black</color>
+    <color name="colorGray">@android:color/darker_gray</color>
+    <color name="colorGrayTransparent">#14000000</color>
+    <color name="colorPinkTransparent">#64f7276d</color>
+    <color name="colorTransparent">@android:color/transparent</color>
+    <color name="colorPink">#fc3c89</color>
+    <color name="colorPinkDark">#781a3f</color>
+    <color name="colorGalleryBackground">#303B47</color>
+    <color name="colorGallerySubBackground">#444e59</color>
+    <color name="galleryBlue">#53B1BB</color>
+    <color name="galleryOrange">#D94E37</color>
+    <color name="galleryGray">#EAE8DA</color>
+    <color name="galleryOrangeDark">#FFEC3618</color>
+    <color name="lightGray">#f3f3f3</color>
+
+    <color name="textColorFolder">#4d4d4f</color>
+    <color name="colorLineGray">#CACACA</color>
+
+    <color name="thumb_background_color">#000000</color>
+    <color name="zomato_red">#a40100</color>
+    <color name="placeholder_background">#222322</color>
 </resources>

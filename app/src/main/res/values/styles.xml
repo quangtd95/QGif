@@ -1,11 +1,41 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPink</item>
+        <item name="colorPrimaryDark">@color/colorPinkDark</item>
+        <item name="colorAccent">@color/colorPink</item>
     </style>
 
+    <style name="LightTheme" parent="AppTheme">
+        <item name="textColor">@color/textColorFolder</item>
+        <item name="bgColor">@color/colorWhite</item>
+        <item name="subBgColor">@color/colorGray</item>
+        <item name="bgWall">@drawable/bg_wall</item>
+    </style>
+
+    <style name="DarkTheme" parent="AppTheme">
+        <item name="textColor">@color/colorWhite</item>
+        <item name="bgColor">@color/colorGalleryBackground</item>
+        <item name="subBgColor">@color/colorGallerySubBackground</item>
+        <item name="bgWall">@drawable/bg_wall_blue</item>
+    </style>
+
+    <style name="animationDialog">
+        <item name="android:windowEnterAnimation">@anim/view_enter_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/view_exit_to_bottom</item>
+    </style>
+
+    <style name="FullHeightDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ImageViewInTextLayout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/_10sdp</item>
+        <item name="android:paddingRight">@dimen/_10sdp</item>
+        <item name="android:paddingBottom">@dimen/_5sdp</item>
+        <item name="android:paddingTop">@dimen/_5sdp</item>
+        <item name="android:background">@drawable/bg_img_adjustment</item>
+    </style>
 </resources>

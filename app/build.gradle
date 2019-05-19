@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.sgif.makegif"
+        applicationId "com.quangtd.qgifmaker"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -19,6 +21,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -31,4 +36,13 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     compile 'com.waynejo:androidndkgif:0.3.3'
     implementation 'nl.bravobit:android-ffmpeg:1.1.5'
+    //dynamic dimens
+    implementation 'com.intuit.sdp:sdp-android:1.0.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // circle imageview
+//    api 'de.hdodenhof:circleimageview:3.0.0'
+//    api 'com.androidadvance:topsnackbar:1.1.1'
+}
+repositories {
+    mavenCentral()
 }

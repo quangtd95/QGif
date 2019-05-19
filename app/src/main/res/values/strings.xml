@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Make Gif</string>
+    <string name="app_name">Q Gif Maker</string>
     <string name="choose_images">Choose Images</string>
     <string name="text_please_choose_photo">Please choose some photos</string>
     <string name="text_start">start</string>
@@ -19,4 +19,18 @@
     <string name="start_time">start time:</string>
     <string name="end_time">end time:</string>
     <string name="need_permission">need permission to sdcard to save gif</string>
+
+    <string name="home_create_video">Create Video</string>
+    <string name="home_edit_video">Create Gif</string>
+    <string name="home_edit_photo">Edit Photo</string>
+    <string name="home_edit_audio">Edit Audio</string>
+    <string name="home_setting">Setting</string>
+    <string name="home_my_gallery">My Gallery</string>
+    <string name="splash_confirm_exit">Please Click Back again to EXIT</string>
+    <string name="gallery_back">back</string>
+    <string name="gallery_next">next</string>
+    <string name="home_view_more_video"><u>View more</u></string>
+    <string name="home_bottom_text">Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders</string>
+    <string name="policy_url">https://qstudio-create-vid.flycricket.io/privacy.html</string>
+    <string name="center_id">com.quangtd.qstudio</string>
 </resources>
