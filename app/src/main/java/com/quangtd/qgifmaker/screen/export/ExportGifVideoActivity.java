@@ -29,7 +29,7 @@ import com.quangtd.qgifmaker.common.Constants;
 import com.quangtd.qgifmaker.common.base.BaseActivity;
 import com.quangtd.qgifmaker.common.listener.AfterTextChangedWatcher;
 import com.quangtd.qgifmaker.common.listener.OnSeekBarChangeListener;
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.screen.complete.CompleteActivity;
 import com.quangtd.qgifmaker.util.DialogUtils;
 import com.quangtd.qgifmaker.util.Utils;
@@ -88,7 +88,7 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
     protected void bindData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Media mVideo = bundle.getParcelable(Constants.BUNDLE_KEY_VIDEO);
+            Photo mVideo = bundle.getParcelable(Constants.BUNDLE_KEY_VIDEO);
             if (mVideo == null) {
                 DialogUtils.createAlertDialog(this, "Error", "video must not be null", this::finish);
             } else {
@@ -193,7 +193,7 @@ public class ExportGifVideoActivity extends BaseActivity<ExportGifVideoPresenter
         mImvBack.setOnClickListener(v -> finish());
     }
 
-    public static void startActivity(Context context, Media video) {
+    public static void startActivity(Context context, Photo video) {
         Intent intent = new Intent(context, ExportGifVideoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.BUNDLE_KEY_VIDEO, video);

@@ -19,7 +19,7 @@ import java.lang.reflect.ParameterizedType;
  * Created by quang.td95@gmail.com
  * on 9/28/2018.
  */
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements IBaseView {
 
     private P viewPresenter;
 
@@ -43,13 +43,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     protected abstract void initActions();
 
-    public P getPresenter(BaseView baseView) {
+    public P getPresenter(IBaseView IBaseView) {
         try {
             if (this.viewPresenter == null) {
                 String e = ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
                 Class classDefinition = Class.forName(e);
                 this.viewPresenter = (P) classDefinition.newInstance();
-                this.viewPresenter.setIFace(baseView);
+                this.viewPresenter.setIFace(IBaseView);
                 this.viewPresenter.onInit();
                 return this.viewPresenter;
             }

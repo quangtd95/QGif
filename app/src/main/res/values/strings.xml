@@ -33,4 +33,6 @@
     <string name="home_bottom_text">Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders</string>
     <string name="policy_url">https://qstudio-create-vid.flycricket.io/privacy.html</string>
     <string name="center_id">com.quangtd.qstudio</string>
+    <string name="gallery_select_more_photo">please select at least one photo!</string>
+    <string name="gallery_select_files">Select Files</string>
 </resources>

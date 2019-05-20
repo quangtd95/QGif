@@ -26,12 +26,12 @@ import com.quangtd.qgifmaker.common.Constants;
 import com.quangtd.qgifmaker.common.base.BaseActivity;
 import com.quangtd.qgifmaker.common.listener.AfterTextChangedWatcher;
 import com.quangtd.qgifmaker.common.listener.OnSeekBarChangeListener;
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.Photo;
+import com.quangtd.qgifmaker.screen.complete.CompleteActivity;
+import com.quangtd.qgifmaker.screen.gallery.ChooseAdapter;
+import com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity;
 import com.quangtd.qgifmaker.util.DialogUtils;
 import com.quangtd.qgifmaker.util.RecyclerViewUtils;
-import com.quangtd.qgifmaker.screen.complete.CompleteActivity;
-import com.quangtd.qgifmaker.screen.gallery.GalleryActivity;
-import com.quangtd.qgifmaker.screen.gallery.ChooseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +53,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     private ImageView mImvBack;
 
     private ChooseAdapter mChooseAdapter;
+    private ExportGifPhotoPresenter mPresenter;
 
     @Override
     protected int getIdLayout() {
@@ -61,17 +62,18 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
 
     @Override
     protected void bindData() {
+        mPresenter = getPresenter(this);
         Bundle bundle = getIntent().getExtras();
-        List<Media> mPhotoList;
+        List<Photo> mPhotoList;
         if (bundle != null) {
             mPhotoList = bundle.getParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO);
             if (mPhotoList == null || mPhotoList.size() < Constants.MIN_PHOTO) {
                 DialogUtils.createAlertDialog(this, "Error", "please choose at least 2 photos", this::finish);
             }
             mChooseAdapter.setItems(mPhotoList);
-            getPresenter(this).setAdapter(mChooseAdapter);
-            getPresenter(this).setDefaultDimens();
-            getPresenter(this).setDelay(mSbDelay.getProgress());
+            mPresenter.setAdapter(mChooseAdapter);
+            mPresenter.setDefaultDimens();
+            mPresenter.setDelay(mSbDelay.getProgress());
             mChkKeepRatio.setChecked(getPresenter(this).isKeepRatio());
         } else {
             finish();
@@ -93,7 +95,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mImvBack = findViewById(R.id.imvBack);
         mPgExportGif.setVisibility(View.INVISIBLE);
 
-        RecyclerViewUtils.Create().setUpGridHorizontal(this, mRvPhotoChoose, 1);
+        RecyclerViewUtils.getInstance().setUpGridHorizontal(this, mRvPhotoChoose, 1);
         mChooseAdapter = new ChooseAdapter(this);
         mRvPhotoChoose.setAdapter(mChooseAdapter);
     }
@@ -146,7 +148,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         mImvBack.setOnClickListener(v -> finish());
     }
 
-    public static void startActivity(Context context, ArrayList<Media> photos) {
+    public static void startActivity(Context context, ArrayList<Photo> photos) {
         Intent intent = new Intent(context, ExportGifPhotoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.BUNDLE_KEY_LIST_PHOTO, photos);
@@ -165,7 +167,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
                     "error",
                     "please choose at least " + Constants.MIN_PHOTO + " photos to continue",
                     () -> {
-                        GalleryActivity.startPhotoActivity(this, mChooseAdapter.getItems());
+                        PhotoGalleryActivity.Companion.startPhotoActivity(this, mChooseAdapter.getItems());
                         finish();
                     });
         } else {
@@ -226,14 +228,11 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getPresenter(this).exportGif();
-                } else {
-                    DialogUtils.createAlertDialog(this, "", "need write to sdcard permission to process gif");
-                }
-                break;
+        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getPresenter(this).exportGif();
+            } else {
+                DialogUtils.createAlertDialog(this, "", "need write to sdcard permission to process gif");
             }
         }
     }

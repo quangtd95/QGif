@@ -8,7 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.domain.model.MediaType;
 import com.quangtd.qgifmaker.util.Utils;
 import com.waynejo.androidndkgif.GifEncoder;
@@ -77,7 +77,7 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
         Paint p = new Paint();
         switch (mediaType) {
             case PHOTO:
-                final List<Media> photoList = params.getPhotos();
+                final List<Photo> photoList = params.getPhotos();
                 for (int i = 0; i < photoList.size(); i++) {
                     canvas.drawColor(Color.BLACK);
                     String s = photoList.get(i).getPath();

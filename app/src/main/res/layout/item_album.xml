@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/subBgColor">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imvThumbnail"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/ic_temp"
+        app:civ_border_color="@color/colorWhite"
+        app:civ_border_overlay="true"
+        app:civ_border_width="@dimen/_2sdp"
+        app:civ_circle_background_color="@color/colorWhite" />
+
+    <com.quangtd.qgifmaker.screen.FontTextView
+        android:id="@+id/tvNumberOfPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="5"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_15sdp" />
+
+    <TextView
+
+        android:id="@+id/tvNameFolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/imvThumbnail"
+        android:layout_alignStart="@id/imvThumbnail"
+        android:layout_below="@id/imvThumbnail"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_12sdp" />
+</RelativeLayout>

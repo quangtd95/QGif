@@ -9,14 +9,14 @@ import android.widget.ImageView;
 
 import com.quangtd.qgifmaker.R;
 import com.quangtd.qgifmaker.common.GlideApp;
-import com.quangtd.qgifmaker.common.base.BaseAdapter;
+import com.quangtd.qgifmaker.common.base.IAdapter;
 import com.quangtd.qgifmaker.common.base.BaseViewHolder;
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.util.Utils;
 
 import java.io.File;
 
-public class ChooseAdapter extends BaseAdapter<Media, ChooseAdapter.ItemViewHolder> {
+public class ChooseAdapter extends IAdapter<Photo, ChooseAdapter.ItemViewHolder> {
 
     public interface OnClickRemoveItemListener {
         void onRemoveItem(int position);
@@ -42,7 +42,7 @@ public class ChooseAdapter extends BaseAdapter<Media, ChooseAdapter.ItemViewHold
     }
 
 
-    class ItemViewHolder extends BaseViewHolder<Media> {
+    class ItemViewHolder extends BaseViewHolder<Photo> {
         private ImageView imgRemove;
         private ImageView imgChoose;
 
@@ -63,7 +63,7 @@ public class ChooseAdapter extends BaseAdapter<Media, ChooseAdapter.ItemViewHold
         }
 
         @Override
-        public void bindData(Media photo) {
+        public void bindData(Photo photo) {
             GlideApp.with(mContext).load(new File(photo.getPath()))
                     .centerCrop()
                     .override(mSizeImage, mSizeImage)

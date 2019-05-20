@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.quangtd.qgifmaker.R;
 import com.quangtd.qgifmaker.common.base.BaseActivity;
 import com.quangtd.qgifmaker.domain.model.MediaType;
-import com.quangtd.qgifmaker.screen.gallery.GalleryActivity;
+import com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity;
 import com.quangtd.qgifmaker.util.DialogUtils;
 
 
@@ -91,6 +91,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     }
 
     private void openGallery(MediaType mediaType) {
+//        Intent intent = new Intent(this, PhotoGalleryActivity.class);
+//        startActivity(intent);
         this.mMediaType = mediaType;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -99,10 +101,10 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                GalleryActivity.startPhotoActivity(this, mediaType);
+                PhotoGalleryActivity.Companion.startPhotoActivity(this, mediaType);
             }
         } else {
-            GalleryActivity.startPhotoActivity(this, mediaType);
+            PhotoGalleryActivity.Companion.startPhotoActivity(this, mediaType);
         }
     }
 
@@ -140,7 +142,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    GalleryActivity.startPhotoActivity(this, mMediaType);
+                    PhotoGalleryActivity.Companion.startPhotoActivity(this, mMediaType);
                 } else {
                     DialogUtils.createAlertDialog(this, "", "need permission to process gif");
                 }

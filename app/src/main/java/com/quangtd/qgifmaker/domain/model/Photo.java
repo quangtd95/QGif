@@ -6,7 +6,7 @@ import android.os.Parcelable;
 
 import com.quangtd.qgifmaker.common.base.BaseModel;
 
-public class Media implements Parcelable, BaseModel {
+public class Photo implements Parcelable, BaseModel {
     private Uri uri;
     private String path;
     private String name;
@@ -14,7 +14,7 @@ public class Media implements Parcelable, BaseModel {
     private int duration;
     private int id;
 
-    protected Media(Parcel in) {
+    protected Photo(Parcel in) {
         id = in.readInt();
         uri = in.readParcelable(Uri.class.getClassLoader());
         path = in.readString();
@@ -23,15 +23,15 @@ public class Media implements Parcelable, BaseModel {
         duration = in.readInt();
     }
 
-    public static final Creator<Media> CREATOR = new Creator<Media>() {
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
         @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
         }
 
         @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
+        public Photo[] newArray(int size) {
+            return new Photo[size];
         }
     };
 
@@ -43,10 +43,10 @@ public class Media implements Parcelable, BaseModel {
         this.select = select;
     }
 
-    public Media() {
+    public Photo() {
     }
 
-    public Media(int id, String path, String name, int duration) {
+    public Photo(int id, String path, String name, int duration) {
         this.id = id;
         this.path = path;
         this.name = name;
@@ -55,6 +55,10 @@ public class Media implements Parcelable, BaseModel {
 
     public void setUri(Uri uri) {
         this.uri = uri;
+    }
+
+    public Uri getUri() {
+        return uri;
     }
 
     public String getPath() {

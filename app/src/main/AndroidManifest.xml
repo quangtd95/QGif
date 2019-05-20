@@ -25,9 +25,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.quangtd.qgifmaker.screen.gallery.GalleryActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.quangtd.qgifmaker.screen.export.ExportGifPhotoActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -35,6 +32,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.quangtd.qgifmaker.screen.export.ExportGifVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity"
             android:screenOrientation="portrait" />
     </application>
 

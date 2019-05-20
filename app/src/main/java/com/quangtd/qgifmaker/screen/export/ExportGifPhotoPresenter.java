@@ -8,8 +8,8 @@ import android.widget.Toast;
 import com.quangtd.qgifmaker.common.Constants;
 import com.quangtd.qgifmaker.common.base.BasePresenter;
 import com.quangtd.qgifmaker.domain.model.MediaType;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.domain.task.OnExportGifCallback;
-import com.quangtd.qgifmaker.domain.model.Media;
 import com.quangtd.qgifmaker.domain.task.ExportGifParams;
 import com.quangtd.qgifmaker.domain.task.ExportGifTask;
 import com.quangtd.qgifmaker.screen.gallery.ChooseAdapter;
@@ -52,8 +52,8 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     public void calculateDefaultDimens() {
         mDefaultWidth = 1;
         mDefaultHeight = 1;
-        List<Media> photoList = mPhotoAdapter.getItems();
-        for (Media photo : photoList) {
+        List<Photo> photoList = mPhotoAdapter.getItems();
+        for (Photo photo : photoList) {
             String path = photo.getPath();
             if (!TextUtils.isEmpty(path)) {
                 Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -84,7 +84,7 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     public void setDelay(int progress) {
         float range = Constants.MAX_DELAY - Constants.MIN_DELAY;
         this.mDelay = (int) (progress * 1.0f / 100 * range + Constants.MIN_DELAY);
-        getView().setDuration(mDelay);
+        getIView().setDuration(mDelay);
     }
 
     public void setWidth(int width) {
@@ -103,8 +103,8 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
 
         this.mWidth = width;
         this.mHeight = height;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public boolean isKeepRatio() {
@@ -130,39 +130,39 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
         }
         this.mWidth = width;
         this.mHeight = height;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public void setDefaultDimens() {
         mWidth = mDefaultWidth;
         mHeight = mDefaultHeight;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public void exportGif() {
         ExportGifParams params = new ExportGifParams(MediaType.PHOTO);
         if (mDelay > Constants.MAX_DELAY || mDelay < Constants.MIN_DELAY) {
-            getView().showNotifyDialog("delay time is not correct");
+            getIView().showNotifyDialog("delay time is not correct");
             return;
         } else {
             params.setDelay(mDelay);
         }
         if (mWidth <= 0 || mWidth > Constants.MAX_WIDTH) {
-            getView().showNotifyDialog("width is not correct");
+            getIView().showNotifyDialog("width is not correct");
             return;
         } else {
             params.setWidth(mWidth);
         }
         if (mHeight <= 0 || mHeight > Constants.MAX_HEIGHT) {
-            getView().showNotifyDialog("height is not correct");
+            getIView().showNotifyDialog("height is not correct");
             return;
         } else {
             params.setHeight(mHeight);
         }
         if (mPhotoAdapter.size() < Constants.MIN_PHOTO || mPhotoAdapter.size() > Constants.MAX_PHOTO) {
-            getView().showNotifyDialog("list photos are not correct");
+            getIView().showNotifyDialog("list photos are not correct");
             return;
         } else {
             params.setPhotos(mPhotoAdapter.getItems());
@@ -174,23 +174,23 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
 
     @Override
     public void onProgressExportGif(Float progress) {
-        getView().onProgress(progress);
+        getIView().onProgress(progress);
     }
 
     @Override
     public void onCompleteExportGif(String s) {
-        getView().onCompleteExport(s);
+        getIView().onCompleteExport(s);
         Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCancelledExportGif(String s) {
-        getView().onCancelledExport(s);
-        getView().showNotifyDialog(s);
+        getIView().onCancelledExport(s);
+        getIView().showNotifyDialog(s);
     }
 
     @Override
     public void onPrepareExportGif() {
-        getView().onPrepareExport();
+        getIView().onPrepareExport();
     }
 }

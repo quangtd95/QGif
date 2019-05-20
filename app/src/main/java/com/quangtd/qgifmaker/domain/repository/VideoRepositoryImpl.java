@@ -8,8 +8,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
-import com.quangtd.qgifmaker.domain.model.FolderMedia;
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.FolderPhoto;
+import com.quangtd.qgifmaker.domain.model.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.List;
  * Created by quang.td95@gmail.com
  * on 9/29/2018.
  */
-public class VideoRepositoryImpl implements MediaRepository {
+public class VideoRepositoryImpl implements PhotoRepository {
 
     @Override
-    public List<FolderMedia> getFolderMedia(Context context) {
+    public List<FolderPhoto> getFolderMedia(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             return null;
         }
-        List<Media> videos = new ArrayList<>();
+        List<Photo> videos = new ArrayList<>();
 
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DURATION, MediaStore.Video.VideoColumns._ID};
@@ -38,7 +38,7 @@ public class VideoRepositoryImpl implements MediaRepository {
                 String name = getVideoName(path);
                 int duration = c.getInt(1);
                 int id = c.getInt(2);
-                Media video = new Media(id, path, name, duration);
+                Photo video = new Photo(id, path, name, duration);
                 videos.add(video);
             }
             c.close();
@@ -46,14 +46,14 @@ public class VideoRepositoryImpl implements MediaRepository {
         return new ArrayList<>(getAlbumVideo(videos));
     }
 
-    private List<FolderMedia> getAlbumVideo(List<Media> videos) {
-        List<FolderMedia> albumVideos = new ArrayList<>();
+    private List<FolderPhoto> getAlbumVideo(List<Photo> videos) {
+        List<FolderPhoto> albumVideos = new ArrayList<>();
 
-        for (Media video : videos) {
+        for (Photo video : videos) {
             if (!checkAlbum(albumVideos, video)) {
-                List<Media> videos1 = new ArrayList<>();
+                List<Photo> videos1 = new ArrayList<>();
                 videos1.add(video);
-                FolderMedia albumVideo = new FolderMedia(videos1, getAlbumName(video.getPath()));
+                FolderPhoto albumVideo = new FolderPhoto(videos1, getAlbumName(video.getPath()));
                 albumVideo.setPath(getPathAlbum(video.getPath()));
                 albumVideos.add(albumVideo);
             }
@@ -61,12 +61,12 @@ public class VideoRepositoryImpl implements MediaRepository {
         return albumVideos;
     }
 
-    private boolean checkAlbum(List<FolderMedia> albumVideos, Media video) {
+    private boolean checkAlbum(List<FolderPhoto> albumVideos, Photo video) {
         boolean check = false;
         for (int i = 0; i < albumVideos.size(); i++) {
             if (getAlbumName(video.getPath()).equals(albumVideos.get(i).getName())) {
                 check = true;
-                albumVideos.get(i).getListMedia().add(video);
+                albumVideos.get(i).getPhotos().add(video);
                 break;
             }
             check = false;

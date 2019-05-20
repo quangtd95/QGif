@@ -14,7 +14,7 @@ public final class RecyclerViewUtils {
      *
      * @return
      */
-    public static RecyclerViewUtils Create() {
+    public static RecyclerViewUtils getInstance() {
         if (mNewInstance == null) {
             mNewInstance = new RecyclerViewUtils();
         }
