@@ -3,16 +3,15 @@ package com.quangtd.qgifmaker.screen.export;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.quangtd.qgifmaker.common.Constants;
 import com.quangtd.qgifmaker.common.base.BasePresenter;
 import com.quangtd.qgifmaker.domain.model.MediaType;
 import com.quangtd.qgifmaker.domain.model.Photo;
-import com.quangtd.qgifmaker.domain.task.OnExportGifCallback;
 import com.quangtd.qgifmaker.domain.task.ExportGifParams;
 import com.quangtd.qgifmaker.domain.task.ExportGifTask;
-import com.quangtd.qgifmaker.screen.gallery.ChooseAdapter;
+import com.quangtd.qgifmaker.domain.task.OnExportGifCallback;
+import com.quangtd.qgifmaker.screen.gallery.adapter.ChooseAdapter;
 import com.quangtd.qgifmaker.util.Utils;
 
 import java.util.List;
@@ -180,7 +179,6 @@ public class ExportGifPhotoPresenter extends BasePresenter<ExportGifPhotoView> i
     @Override
     public void onCompleteExportGif(String s) {
         getIView().onCompleteExport(s);
-        Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
     }
 
     @Override

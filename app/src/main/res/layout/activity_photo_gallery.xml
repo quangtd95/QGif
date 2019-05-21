@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/subBgColor"
-    tools:context=".screen.new_gallery.PhotoGalleryActivity">
+    tools:context=".screen.gallery.PhotoGalleryActivity">
 
 
     <View
@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view3">
 
-        <com.quangtd.qgifmaker.screen.SquareHeightImageView
+        <com.quangtd.qgifmaker.screen.custom.SquareHeightImageView
             android:id="@+id/imvBack"
             android:layout_width="@dimen/height_header"
             android:layout_height="@dimen/height_header"
@@ -58,7 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.quangtd.qgifmaker.screen.FontTextView
+        <com.quangtd.qgifmaker.screen.custom.FontTextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -70,7 +70,7 @@
             app:layout_constraintStart_toEndOf="@id/imvBack"
             app:layout_constraintTop_toTopOf="@id/imvBack" />
 
-        <com.quangtd.qgifmaker.screen.FontTextView
+        <com.quangtd.qgifmaker.screen.custom.FontTextView
             android:id="@+id/tvNumberOfPhotoChosen"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -85,7 +85,7 @@
             app:layout_constraintTop_toTopOf="@id/imvNext"
             tools:ignore="HardcodedText" />
 
-        <com.quangtd.qgifmaker.screen.SquareHeightImageView
+        <com.quangtd.qgifmaker.screen.custom.SquareHeightImageView
             android:id="@+id/imvNext"
             android:layout_width="@dimen/height_header"
             android:layout_height="@dimen/height_header"

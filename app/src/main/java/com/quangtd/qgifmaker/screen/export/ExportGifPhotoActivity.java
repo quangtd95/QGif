@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.quangtd.qgifmaker.R;
 import com.quangtd.qgifmaker.common.Constants;
@@ -28,10 +27,11 @@ import com.quangtd.qgifmaker.common.listener.AfterTextChangedWatcher;
 import com.quangtd.qgifmaker.common.listener.OnSeekBarChangeListener;
 import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.screen.complete.CompleteActivity;
-import com.quangtd.qgifmaker.screen.gallery.ChooseAdapter;
-import com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity;
+import com.quangtd.qgifmaker.screen.custom.GifView;
+import com.quangtd.qgifmaker.screen.gallery.adapter.ChooseAdapter;
 import com.quangtd.qgifmaker.util.DialogUtils;
 import com.quangtd.qgifmaker.util.RecyclerViewUtils;
+import com.quangtd.qgifmaker.util.SnackBarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +51,14 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     private CheckBox mChkKeepRatio;
     private Button mBtnExportGif;
     private ImageView mImvBack;
+    private GifView mGifView;
 
     private ChooseAdapter mChooseAdapter;
     private ExportGifPhotoPresenter mPresenter;
 
     @Override
     protected int getIdLayout() {
+//        return R.layout.activity_gif_photo;
         return R.layout.activity_gif_photo;
     }
 
@@ -75,6 +77,8 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
             mPresenter.setDefaultDimens();
             mPresenter.setDelay(mSbDelay.getProgress());
             mChkKeepRatio.setChecked(getPresenter(this).isKeepRatio());
+            mGifView.setAdapter(mChooseAdapter);
+            mGifView.startPreview();
         } else {
             finish();
         }
@@ -83,6 +87,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
 
     @Override
     protected void initViews() {
+        mGifView = findViewById(R.id.gifView);
         RecyclerView mRvPhotoChoose = findViewById(R.id.rvPhotoChoose);
         mPgExportGif = findViewById(R.id.pgExportGif);
         mSbDelay = findViewById(R.id.sbDelay);
@@ -159,18 +164,19 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
 
     @Override
     public void onRemoveItem(int position) {
-        mChooseAdapter.removeItem(position);
-        mChooseAdapter.refreshRemove(position);
-        if (mChooseAdapter.size() < Constants.MIN_PHOTO) {
+        if (mChooseAdapter.size() <= Constants.MIN_PHOTO) {
             DialogUtils.createAlertDialog(
                     this,
                     "error",
-                    "please choose at least " + Constants.MIN_PHOTO + " photos to continue",
+                    "please choose at least " + Constants.MIN_PHOTO + " photos",
                     () -> {
-                        PhotoGalleryActivity.Companion.startPhotoActivity(this, mChooseAdapter.getItems());
-                        finish();
+//                        PhotoGalleryActivity.Companion.startPhotoActivity(this, mChooseAdapter.getItems());
+//                        finish();
                     });
         } else {
+            mChooseAdapter.removeItem(position);
+            mChooseAdapter.refreshRemove(position);
+            mGifView.refreshRemove(position);
             getPresenter(this).calculateDefaultDimens();
             getPresenter(this).setDefaultDimens();
         }
@@ -179,6 +185,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
     @Override
     public void setDuration(float duration) {
         mTvDuration.setText(String.format(getString(R.string.time_format), duration / 1000));
+        mGifView.setDuration(duration);
     }
 
     @Override
@@ -220,7 +227,7 @@ public class ExportGifPhotoActivity extends BaseActivity<ExportGifPhotoPresenter
         runOnUiThread(() -> {
             mPgExportGif.setVisibility(View.INVISIBLE);
             hideLoading();
-            Toast.makeText(ExportGifPhotoActivity.this, error, Toast.LENGTH_SHORT).show();
+            SnackBarUtils.Companion.showErrorMessage(error, mPgExportGif);
         });
 
     }

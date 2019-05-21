@@ -7,4 +7,7 @@ import com.quangtd.qgifmaker.common.base.IBaseView;
  * on 9/28/2018.
  */
 public interface HomeView extends IBaseView {
+    void onLoadMyGallerySuccess();
+
+    void onLoadMyGalleryFailure(String error);
 }

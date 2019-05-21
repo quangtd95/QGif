@@ -13,6 +13,8 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,15 +22,20 @@ import android.widget.TextView;
 import com.quangtd.qgifmaker.R;
 import com.quangtd.qgifmaker.common.base.BaseActivity;
 import com.quangtd.qgifmaker.domain.model.MediaType;
-import com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity;
+import com.quangtd.qgifmaker.domain.model.Photo;
+import com.quangtd.qgifmaker.screen.complete.CompleteActivity;
+import com.quangtd.qgifmaker.screen.gallery.PhotoGalleryActivity;
+import com.quangtd.qgifmaker.screen.mygallery.MyGalleryActivity;
 import com.quangtd.qgifmaker.util.DialogUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 
 /**
  * Created by quang.td95@gmail.com
  * on 9/28/2018.
  */
-public class HomeActivity extends BaseActivity<HomePresenter> implements HomeView {
+public class HomeActivity extends BaseActivity<HomePresenter> implements HomeView, MyGalleryAdapter.OnClickItemMyGalleryListener {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
 
     private View mBtnChooseImage;
@@ -43,17 +50,35 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
     private ImageView mImvHome;
 
+    private TextView tvViewMore;
+
     private MediaType mMediaType;
 
     private AnimatorSet mScaleUp;
 
     private AnimatorSet mScaleDown;
 
+    private RecyclerView rvMyGallery;
+
+    private MyGalleryAdapter myGalleryAdapter;
+
 
     @Override
     @LayoutRes
     protected int getIdLayout() {
         return R.layout.activity_home;
+    }
+
+    @Override
+    public void onStart() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    101);
+        } else {
+            getPresenter(this).loadMyGallery();
+        }
+        super.onStart();
     }
 
     @Override
@@ -68,11 +93,19 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
         mTvPolicy = findViewById(R.id.tvPolicy);
         mBtnChooseCenter = findViewById(R.id.rlOpenQStudioCenter);
         mTvBottomText = findViewById(R.id.tvBottomText);
+        rvMyGallery = findViewById(R.id.rvMyGallery);
+        tvViewMore = findViewById(R.id.tvViewMore);
         mImvHome = findViewById(R.id.mImvHome);
         mScaleUp = zoomInAnimation(mImvHome);
         mScaleDown = zoomOutAnimation(mImvHome);
         mScaleUp.start();
         mTvBottomText.setSelected(true);
+        rvMyGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rvMyGallery.setNestedScrollingEnabled(false);
+        myGalleryAdapter = new MyGalleryAdapter(this);
+        myGalleryAdapter.setOnClickItemListener(this);
+        rvMyGallery.setAdapter(myGalleryAdapter);
+        getPresenter(this).setAdapter(myGalleryAdapter);
     }
 
     @Override
@@ -84,6 +117,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
         mBtnChooseCenter.setOnClickListener(v -> openCenter(getString(R.string.center_id)));
 
         mTvPolicy.setOnClickListener(v -> openUrl(getString(R.string.policy_url)));
+
+        tvViewMore.setOnClickListener(v -> MyGalleryActivity.Companion.startActivity(this));
     }
 
     private void openUrl(String url) {
@@ -91,8 +126,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     }
 
     private void openGallery(MediaType mediaType) {
-//        Intent intent = new Intent(this, PhotoGalleryActivity.class);
-//        startActivity(intent);
         this.mMediaType = mediaType;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -148,6 +181,14 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
                 }
                 break;
             }
+            case 101: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getPresenter(this).loadMyGallery();
+                } else {
+                    finish();
+                }
+            }
+
         }
     }
 
@@ -207,5 +248,25 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
 
         });
         return scaleDown;
+    }
+
+    @Override
+    public void onClickMyGallery(int position, @NotNull Photo video) {
+        CompleteActivity.startCompleteActivity(this, video.getPath());
+    }
+
+    @Override
+    public void onDeleteMyGallery(int position, @NotNull Photo video) {
+
+    }
+
+    @Override
+    public void onLoadMyGallerySuccess() {
+
+    }
+
+    @Override
+    public void onLoadMyGalleryFailure(String error) {
+
     }
 }

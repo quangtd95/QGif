@@ -34,8 +34,21 @@
             android:name="com.quangtd.qgifmaker.screen.export.ExportGifVideoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.quangtd.qgifmaker.screen.new_gallery.PhotoGalleryActivity"
+            android:name="com.quangtd.qgifmaker.screen.gallery.PhotoGalleryActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.mygallery.MyGalleryActivity"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

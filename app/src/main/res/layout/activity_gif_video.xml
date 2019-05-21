@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,28 +15,76 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dip05">
 
-            <RelativeLayout
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/rlTop"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_header">
 
-                <ImageView
-                    android:id="@+id/imvBack"
-                    android:layout_width="@dimen/height_header"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/dip12"
-                    android:src="@drawable/ic_back" />
+                <View
+                    android:id="@+id/vTop"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_2sdp"
+                    android:background="@color/galleryOrange"
+                    app:layout_constraintEnd_toStartOf="@+id/view3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints" />
 
-                <TextView
-                    android:id="@+id/tvLabelExportGif"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/imvBack"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/export_gif_from_video"
-                    android:textColor="@color/color_dark_gray"
-                    android:textSize="@dimen/dip18" />
-            </RelativeLayout>
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_2sdp"
+                    android:background="@color/galleryBlue"
+                    app:layout_constraintEnd_toStartOf="@+id/view4"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/vTop"
+                    tools:ignore="MissingConstraints" />
+
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_2sdp"
+                    android:background="@color/colorPink"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/view3"
+                    tools:ignore="MissingConstraints" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/clNav"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/bgColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view3">
+
+                    <com.quangtd.qgifmaker.screen.custom.SquareHeightImageView
+                        android:id="@+id/imvBack"
+                        android:layout_width="@dimen/height_header"
+                        android:layout_height="@dimen/height_header"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/bg_back_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.quangtd.qgifmaker.screen.custom.FontTextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/export_gif_from_video"
+                        android:textColor="@color/galleryBlue"
+                        app:font_name="Pacifico.ttf"
+                        app:layout_constraintBottom_toBottomOf="@id/imvBack"
+                        app:layout_constraintStart_toEndOf="@id/imvBack"
+                        app:layout_constraintTop_toTopOf="@id/imvBack" />
+
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
 
             <ProgressBar
                 android:id="@+id/pgExportGif"
@@ -55,28 +104,28 @@
                 android:layout_below="@id/pgExportGif"
                 android:layout_centerHorizontal="true"
                 android:foregroundGravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_below="@id/videoView"
+                android:layout_alignParentStart="true"
                 android:layout_margin="@dimen/dip10"
                 tools:text="1000" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@id/videoView"
+                android:layout_alignParentEnd="true"
                 android:layout_margin="@dimen/dip10"
                 tools:text="1000" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvLabelStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,60 +147,63 @@
                 android:id="@id/tvLabelEndTime"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/sbEndTime"
+                android:layout_alignParentStart="true"
                 android:text="@string/end_time" />
 
             <SeekBar
                 android:id="@id/sbEndTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/sbStartTime"
                 android:layout_below="@id/sbStartTime"
+                android:layout_alignStart="@id/sbStartTime"
                 android:layout_marginTop="10dp"
                 android:max="100"
                 android:progress="100" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvLabelDelay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/sbDelay"
                 android:layout_below="@+id/tvLabelEndTime"
+                android:layout_alignTop="@+id/sbDelay"
+                android:layout_alignParentStart="true"
                 android:text="@string/label_delay" />
 
             <SeekBar
                 android:id="@id/sbDelay"
-                android:layout_width="match_parent"
+                android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignStart="@id/sbStartTime"
                 android:layout_below="@id/sbEndTime"
+                android:layout_alignStart="@id/sbStartTime"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/dip10"
+                android:layout_marginEnd="114dp"
                 android:layout_toEndOf="@id/tvLabelDelay"
                 android:max="100"
                 android:progress="0" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvDuration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignStart="@id/sbDelay"
                 android:layout_below="@+id/tvLabelDelay"
+                android:layout_alignStart="@id/sbDelay"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/dip10"
                 android:gravity="center"
                 tools:ignore="HardcodedText"
                 tools:text="0.5s" />
 
-            <TextView
+            <com.quangtd.qgifmaker.screen.custom.FontTextView
                 android:id="@+id/tvLabelDimension"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvDuration"
-                android:layout_margin="@dimen/dip10"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/dip10"
+                android:layout_marginEnd="@dimen/dip10"
+                android:layout_marginBottom="@dimen/dip10"
                 android:text="@string/label_dimension" />
 
             <LinearLayout
@@ -171,8 +223,7 @@
                     android:ems="10"
                     android:hint="@string/hint_width"
                     android:inputType="number"
-                    android:padding="@dimen/dip10"
-                    android:textSize="@dimen/dip12" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <EditText
                     android:id="@+id/edtHeight"
@@ -182,25 +233,33 @@
                     android:ems="10"
                     android:hint="@string/hint_height"
                     android:inputType="number"
-                    android:textSize="@dimen/dip12" />
+                    android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnDefaultDimension"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/sbDelay"
                 android:layout_below="@+id/llDimension"
-                android:text="@string/default_dimension" />
+                android:layout_alignStart="@+id/sbDelay"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/bg_btn_home_slide_show"
+                android:padding="5dp"
+                android:text="@string/default_dimension"
+                android:textColor="@color/color_white" />
 
             <CheckBox
                 android:id="@+id/chkKeepRatio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@id/btnDefaultDimension"
                 android:layout_alignBottom="@+id/btnDefaultDimension"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@id/btnDefaultDimension"
-                android:layout_margin="@dimen/dip10"
+                android:layout_marginStart="@dimen/dip10"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="303dp"
+                android:layout_marginBottom="11dp"
                 android:checked="true"
                 android:text="@string/keep_ratio" />
 
@@ -208,9 +267,13 @@
                 android:id="@+id/btnExportGif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnDefaultDimension"
-                android:layout_centerInParent="true"
-                android:text="@string/export_gif" />
+                android:layout_alignBottom="@+id/btnDefaultDimension"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="0dp"
+                android:layout_toEndOf="@+id/btnDefaultDimension"
+                android:background="@drawable/bg_btn_home_setting"
+                android:text="@string/export_gif"
+                android:textColor="@color/color_white" />
 
         </RelativeLayout>
 

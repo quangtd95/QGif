@@ -8,8 +8,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 
-import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.domain.model.MediaType;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.util.Utils;
 import com.waynejo.androidndkgif.GifEncoder;
 
@@ -34,7 +34,7 @@ public class ExportGifTask extends AsyncTask<ExportGifParams, Float, String> {
             return exportGifParams[0].getResultPath();
         } catch (IOException e) {
             e.printStackTrace();
-            onCancelled(e.getLocalizedMessage());
+            mCallback.onCancelledExportGif(e.getLocalizedMessage());
             return null;
         }
     }

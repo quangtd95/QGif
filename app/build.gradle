@@ -39,7 +39,7 @@ dependencies {
     //dynamic dimens
     implementation 'com.intuit.sdp:sdp-android:1.0.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // circle imageview
+    // circleImageView
     api 'de.hdodenhof:circleimageview:3.0.0'
     api 'com.androidadvance:topsnackbar:1.1.1'
     //ExpandableLayout

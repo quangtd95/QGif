@@ -21,7 +21,7 @@ public class Constants {
     public static final int MIN_PHOTO = 2;
 
     public static final int MAX_DELAY = 1000;
-    public static final int MIN_DELAY = 0;
+    public static final int MIN_DELAY = 50;
 
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;
@@ -31,5 +31,6 @@ public class Constants {
     public static final int DEFAULT_DELAY = 500;
 
     //%s : thời gian xuất gif
-    public static String RESULT_PATH = Environment.getExternalStorageDirectory() + File.separator + "SGif_%s.gif";
+    public static String RESULT_FOLDER = Environment.getExternalStorageDirectory() + File.separator + "QGif";
+    public static String RESULT_PATH = RESULT_FOLDER + File.separator + "SGif_%s.gif";
 }
