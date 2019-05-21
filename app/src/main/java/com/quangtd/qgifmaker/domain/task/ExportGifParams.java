@@ -1,6 +1,6 @@
 package com.quangtd.qgifmaker.domain.task;
 
-import com.quangtd.qgifmaker.domain.model.Media;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.domain.model.MediaType;
 
 import java.util.List;
@@ -14,8 +14,8 @@ public class ExportGifParams {
     private int delay;
     private int width;
     private int height;
-    private List<Media> photos;
-    private Media video;
+    private List<Photo> photos;
+    private Photo video;
     private int startTime;
     private int endTime;
     private String resultPath;
@@ -56,19 +56,19 @@ public class ExportGifParams {
         this.height = height;
     }
 
-    public List<Media> getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<Media> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 
-    public Media getVideo() {
+    public Photo getVideo() {
         return video;
     }
 
-    public void setVideo(Media video) {
+    public void setVideo(Photo video) {
         this.video = video;
     }
 

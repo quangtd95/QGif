@@ -6,14 +6,14 @@ import android.content.Context;
  * Created by quang.td95@gmail.com
  * on 9/28/2018.
  */
-public abstract class BasePresenter<I extends BaseView> {
+public abstract class BasePresenter<I extends IBaseView> {
 
     private I view;
 
     public BasePresenter() {
     }
 
-    public I getView() {
+    public I getIView() {
         return this.view;
     }
 

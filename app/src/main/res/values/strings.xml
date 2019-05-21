@@ -8,7 +8,7 @@
     <string name="choose_photo">Photo</string>
     <string name="choose_video">Video</string>
     <string name="label_delay">Delay</string>
-    <string name="label_dimension">Dimension</string>
+    <string name="label_dimension">Dimensions:</string>
     <string name="hint_width">width</string>
     <string name="hint_height">height</string>
     <string name="default_dimension">default dimension</string>
@@ -33,4 +33,6 @@
     <string name="home_bottom_text">Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders Q_ Gif Maker: Create your wonders</string>
     <string name="policy_url">https://qstudio-create-vid.flycricket.io/privacy.html</string>
     <string name="center_id">com.quangtd.qstudio</string>
+    <string name="gallery_select_more_photo">please select at least one photo!</string>
+    <string name="gallery_select_files">Select Files</string>
 </resources>

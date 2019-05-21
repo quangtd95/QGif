@@ -1,12 +1,11 @@
 package com.quangtd.qgifmaker.screen.export;
 
 import android.graphics.Bitmap;
-import android.widget.Toast;
 
 import com.quangtd.qgifmaker.common.Constants;
 import com.quangtd.qgifmaker.common.base.BasePresenter;
-import com.quangtd.qgifmaker.domain.model.Media;
 import com.quangtd.qgifmaker.domain.model.MediaType;
+import com.quangtd.qgifmaker.domain.model.Photo;
 import com.quangtd.qgifmaker.domain.task.ExportGifFfmpeg;
 import com.quangtd.qgifmaker.domain.task.ExportGifParams;
 import com.quangtd.qgifmaker.domain.task.ExportGifTask;
@@ -20,7 +19,7 @@ import nl.bravobit.ffmpeg.FFmpeg;
  * on 9/29/2018.
  */
 public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> implements OnExportGifCallback {
-    private Media mVideo;
+    private Photo mVideo;
 
     //always milliseconds
     private int mDelay = Constants.DEFAULT_DELAY;
@@ -62,7 +61,7 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
         mEndTime = mVideo.getDuration();
     }
 
-    public void setVideo(Media video) {
+    public void setVideo(Photo video) {
         this.mVideo = video;
         calculateDefaultValues();
     }
@@ -70,7 +69,7 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
     public void setDelay(int delay) {
         float range = Constants.MAX_DELAY - Constants.MIN_DELAY;
         this.mDelay = (int) (delay * 1.0f / 100 * range + Constants.MIN_DELAY);
-        getView().setDelay(mDelay);
+        getIView().setDelay(mDelay);
     }
 
     public void setWidth(int width) {
@@ -89,8 +88,8 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
 
         this.mWidth = width;
         this.mHeight = height;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public boolean isKeepRatio() {
@@ -116,40 +115,40 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
         }
         this.mWidth = width;
         this.mHeight = height;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public void setDefaultDimens() {
         mWidth = mDefaultWidth;
         mHeight = mDefaultHeight;
-        getView().setWidthGif(String.valueOf(mWidth));
-        getView().setHeightGif(String.valueOf(mHeight));
+        getIView().setWidthGif(String.valueOf(mWidth));
+        getIView().setHeightGif(String.valueOf(mHeight));
     }
 
     public void exportGif() {
         ExportGifParams params = new ExportGifParams(MediaType.VIDEO);
         if (mDelay > Constants.MAX_DELAY || mDelay < Constants.MIN_DELAY) {
-            getView().showNotifyDialog("delay time is not correct");
+            getIView().showNotifyDialog("delay time is not correct");
             return;
         } else {
             params.setDelay(mDelay);
         }
         if (mWidth <= 0 || mWidth > Constants.MAX_WIDTH) {
-            getView().showNotifyDialog("width is not correct");
+            getIView().showNotifyDialog("width is not correct");
             return;
         } else {
             params.setWidth(mWidth);
         }
         if (mHeight <= 0 || mHeight > Constants.MAX_HEIGHT) {
-            getView().showNotifyDialog("height is not correct");
+            getIView().showNotifyDialog("height is not correct");
             return;
         } else {
             params.setHeight(mHeight);
         }
         if (mVideo != null) {
             if (mStartTime >= mEndTime || mStartTime < 0 || mStartTime > mVideo.getDuration() || mEndTime < 0 || mEndTime > mVideo.getDuration()) {
-                getView().showNotifyDialog("time is not correct");
+                getIView().showNotifyDialog("time is not correct");
                 return;
             } else {
                 params.setVideo(mVideo);
@@ -157,7 +156,7 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
                 params.setEndTime(mEndTime != 0 ? mEndTime : mVideo.getDuration());
             }
         } else {
-            getView().showNotifyDialog("video is not correct");
+            getIView().showNotifyDialog("video is not correct");
             return;
         }
         params.setResultPath(String.format(Constants.RESULT_PATH, Utils.parseTimeStampToString(System.currentTimeMillis())));
@@ -174,24 +173,23 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
 
     @Override
     public void onProgressExportGif(Float progress) {
-        getView().onProgress(progress);
+        getIView().onProgress(progress);
     }
 
     @Override
     public void onCompleteExportGif(String s) {
-        getView().onCompleteExport(s);
-        Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+        getIView().onCompleteExport(s);
     }
 
     @Override
     public void onCancelledExportGif(String s) {
-        getView().onCancelledExport(s);
-        getView().showNotifyDialog(s);
+        getIView().onCancelledExport(s);
+        getIView().showNotifyDialog(s);
     }
 
     @Override
     public void onPrepareExportGif() {
-        getView().onPrepareExport();
+        getIView().onPrepareExport();
     }
 
 
@@ -199,13 +197,13 @@ public class ExportGifVideoPresenter extends BasePresenter<ExportGifVideoView> i
         this.mStartTime = (int) (progress * 1.0f / 100 * mVideo.getDuration());
         if (mStartTime <= 0) mStartTime = 0;
         if (mStartTime >= mEndTime) mStartTime = mEndTime;
-        getView().setStartTimeProgress((int) (mStartTime * 1.0f / mVideo.getDuration() * 100), mStartTime);
+        getIView().setStartTimeProgress((int) (mStartTime * 1.0f / mVideo.getDuration() * 100), mStartTime);
     }
 
     public void setEndTime(int progress) {
         this.mEndTime = (int) (progress * 1.0f / 100 * mVideo.getDuration());
         if (mEndTime >= mVideo.getDuration()) mEndTime = mVideo.getDuration();
         if (mEndTime <= mStartTime) mEndTime = mStartTime;
-        getView().setEndTimeProgress((int) (mEndTime * 1.0f / mVideo.getDuration() * 100), mEndTime);
+        getIView().setEndTimeProgress((int) (mEndTime * 1.0f / mVideo.getDuration() * 100), mEndTime);
     }
 }

@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher_round" />
 
-        <com.quangtd.qgifmaker.screen.FontTextView
+        <com.quangtd.qgifmaker.screen.custom.FontTextView
             android:id="@+id/tvAppName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -112,7 +112,7 @@
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/ic_home_create_video" />
 
-                    <com.quangtd.qgifmaker.screen.FontTextView
+                    <com.quangtd.qgifmaker.screen.custom.FontTextView
                         android:id="@+id/fontTextView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                         android:layout_alignParentTop="true"
                         android:src="@drawable/ic_home_edit_video" />
 
-                    <com.quangtd.qgifmaker.screen.FontTextView
+                    <com.quangtd.qgifmaker.screen.custom.FontTextView
                         android:id="@+id/fontTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/ic_home_create_video" />
 
-                    <com.quangtd.qgifmaker.screen.FontTextView
+                    <com.quangtd.qgifmaker.screen.custom.FontTextView
                         android:id="@+id/fontTvCamera2Gif"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
                         android:layout_alignParentTop="true"
                         android:src="@drawable/ic_home_edit_video" />
 
-                    <com.quangtd.qgifmaker.screen.FontTextView
+                    <com.quangtd.qgifmaker.screen.custom.FontTextView
                         android:id="@+id/fontTextView6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -238,7 +238,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.quangtd.qgifmaker.screen.FontTextView
+                <com.quangtd.qgifmaker.screen.custom.FontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
@@ -289,7 +289,7 @@
         android:layout_alignParentBottom="true"
         android:visibility="visible">
 
-        <com.quangtd.qgifmaker.screen.SquareHeightImageView
+        <com.quangtd.qgifmaker.screen.custom.SquareHeightImageView
             android:id="@+id/imvRate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -298,7 +298,7 @@
             android:src="@drawable/ic_home_award"
             android:visibility="invisible" />
 
-        <com.quangtd.qgifmaker.screen.SquareHeightImageView
+        <com.quangtd.qgifmaker.screen.custom.SquareHeightImageView
             android:id="@+id/imvProfile"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -307,7 +307,7 @@
             android:src="@drawable/ic_home_gift"
             android:visibility="invisible" />
 
-        <com.quangtd.qgifmaker.screen.FontTextView
+        <com.quangtd.qgifmaker.screen.custom.FontTextView
             android:id="@+id/tvBottomText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
